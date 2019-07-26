@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/nav_graph"
+            app:startDestination="@id/News">
+    <fragment android:id="@+id/News"
+              android:name="com.mathgeniusguide.project7.fragments.News"
+              android:label="News"
+              tools:layout="@layout/news">
+        <action android:id="@+id/tab_right"
+                app:destination="@id/News"
+                app:enterAnim="@anim/push_right_in"
+                app:exitAnim="@anim/push_right_out"/>
+        <action android:id="@+id/tab_left"
+                app:destination="@id/News"
+                app:enterAnim="@anim/push_left_in"
+                app:exitAnim="@anim/push_left_out"/>
+        <argument android:name="param1"
+                  app:argType="integer"
+                  android:defaultValue="0"/>
+    </fragment>
+</navigation>
