@@ -3,21 +3,29 @@
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/nav_graph"
-            app:startDestination="@id/News">
-    <fragment android:id="@+id/News"
+            app:startDestination="@id/News0">
+    <fragment android:id="@+id/News0"
               android:name="com.mathgeniusguide.project7.fragments.News"
-              android:label="News"
+              android:label="@string/tab_0_label"
               tools:layout="@layout/news">
-        <action android:id="@+id/tab_right"
-                app:destination="@id/News"
-                app:enterAnim="@anim/push_right_in"
-                app:exitAnim="@anim/push_right_out"/>
-        <action android:id="@+id/tab_left"
-                app:destination="@id/News"
-                app:enterAnim="@anim/push_left_in"
-                app:exitAnim="@anim/push_left_out"/>
-        <argument android:name="param1"
+        <argument android:name="position"
                   app:argType="integer"
                   android:defaultValue="0"/>
+    </fragment>
+    <fragment android:id="@+id/News1"
+              android:name="com.mathgeniusguide.project7.fragments.News"
+              android:label="@string/tab_1_label"
+              tools:layout="@layout/news">
+        <argument android:name="position"
+                  app:argType="integer"
+                  android:defaultValue="1"/>
+    </fragment>
+    <fragment android:id="@+id/News2"
+              android:name="com.mathgeniusguide.project7.fragments.News"
+              android:label="@string/tab_2_label"
+              tools:layout="@layout/news">
+        <argument android:name="position"
+                  app:argType="integer"
+                  android:defaultValue="2"/>
     </fragment>
 </navigation>

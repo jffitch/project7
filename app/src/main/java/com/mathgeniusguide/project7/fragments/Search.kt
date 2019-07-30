@@ -8,15 +8,15 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.mathgeniusguide.project7.R
 import com.mathgeniusguide.project7.util.OnSwipeTouchListener
-import kotlinx.android.synthetic.main.news.*
+import kotlinx.android.synthetic.main.search.*
 
-class News: Fragment() {
-    var position: Int = 0
+class Search: Fragment() {
+    var screen: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            position = it.getInt("position")
+            screen = it.getInt("screen")
         }
     }
 
@@ -32,7 +32,7 @@ class News: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setSwipeListener(view)
-        news_test.text = "Tab ${position} News."
+        search_test.text = if (screen == 0) "Search" else "Notifications"
     }
 
     private fun setSwipeListener(view: View) {

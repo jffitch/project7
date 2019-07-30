@@ -2,9 +2,9 @@
     <string name="app_name">MyNews</string>
 
     <!--titles-->
-    <string name="top_news">Top News</string>
-    <string name="popular_news">Most Popular News</string>
-    <string name="politics_news">Politics News</string>
+    <string name="tab_0_label">Top News</string>
+    <string name="tab_1_label">Most Popular</string>
+    <string name="tab_2_label">Politics News</string>
     <string name="notifications">Notifications</string>
     <string name="search">Search</string>
 </resources>
