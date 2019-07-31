@@ -4,13 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.mathgeniusguide.project7.R
+import com.mathgeniusguide.project7.util.Constants
 import com.mathgeniusguide.project7.util.OnSwipeTouchListener
-import kotlinx.android.synthetic.main.news.*
+import com.mathgeniusguide.project7.viewmodel.NewsViewModel
 
 class News: Fragment() {
+    lateinit var viewModel: NewsViewModel
     var position: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,6 +19,7 @@ class News: Fragment() {
         arguments?.let {
             position = it.getInt("position")
         }
+        viewModel = NewsViewModel(activity!!.application)
     }
 
     override fun onCreateView(
@@ -32,7 +34,22 @@ class News: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setSwipeListener(view)
-        news_test.text = "Tab ${position} News."
+
+        fetch(position)
+    }
+
+    fun fetch(n: Int) {
+        when (n) {
+            Constants.TOP_NEWS -> {
+                viewModel.fetchTopNews()
+            }
+            Constants.POPULAR_NEWS -> {
+                viewModel.fetchPopularNews()
+            }
+            Constants.POLITICS_NEWS -> {
+                viewModel.fetchPoliticsNews()
+            }
+        }
     }
 
     private fun setSwipeListener(view: View) {

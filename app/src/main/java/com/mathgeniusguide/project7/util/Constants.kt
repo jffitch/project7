@@ -3,7 +3,10 @@ package com.mathgeniusguide.project7.util
 import com.mathgeniusguide.project7.R
 
 object Constants {
-    // const val TAB_0_TITLE = R.string.top_news
-    // const val TAB_1_TITLE = R.string.popular_news
-    // const val TAB_2_TITLE = R.string.politics_news
+    const val API_KEY = "W0yBJTOlR8IoXFBrcyH5w09uWw4DvTvO"
+    const val BASE_URL = "https://api.nytimes.com/svc/"
+
+    const val TOP_NEWS = 0
+    const val POPULAR_NEWS = 1
+    const val POLITICS_NEWS = 2
 }
