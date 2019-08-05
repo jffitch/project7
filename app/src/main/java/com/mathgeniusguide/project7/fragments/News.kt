@@ -6,7 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.mathgeniusguide.project7.R
+import com.mathgeniusguide.project7.adapter.CategoryAdapter
+import com.mathgeniusguide.project7.adapter.PopularAdapter
+import com.mathgeniusguide.project7.responses.category.CategoryResult
+import com.mathgeniusguide.project7.responses.popular.PopularResult
 import com.mathgeniusguide.project7.util.Constants
 import com.mathgeniusguide.project7.util.OnSwipeTouchListener
 import com.mathgeniusguide.project7.viewmodel.NewsViewModel
@@ -14,6 +19,8 @@ import kotlinx.android.synthetic.main.news.*
 
 class News: Fragment() {
     lateinit var viewModel: NewsViewModel
+    val categoryNewsList = ArrayList<CategoryResult>()
+    val popularNewsList = ArrayList<PopularResult>()
     var position: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,33 +52,36 @@ class News: Fragment() {
             Constants.TOP_NEWS -> {
                 viewModel.fetchTopNews()
                 viewModel.topNews?.observe(viewLifecycleOwner, Observer {
-                    if (it != null) {
-                        val list = it.results
-                        for (i in list) {
-                            news_test.append("\n${i.title}")
-                        }
+                    if(it != null) {
+                        // Recycler View
+                        // add each line from database to array list, then set up layout manager and adapter
+                        categoryNewsList.addAll(it.results)
+                        rv.layoutManager = LinearLayoutManager(context)
+                        rv.adapter = CategoryAdapter(categoryNewsList, context!!)
                     }
                 })
             }
             Constants.POPULAR_NEWS -> {
                 viewModel.fetchPopularNews()
                 viewModel.popularNews?.observe(viewLifecycleOwner, Observer {
-                    if (it != null) {
-                        val list = it.results
-                        for (i in list) {
-                            news_test.append("\n${i.title}")
-                        }
+                    if(it != null) {
+                        // Recycler View
+                        // add each line from database to array list, then set up layout manager and adapter
+                        popularNewsList.addAll(it.results)
+                        rv.layoutManager = LinearLayoutManager(context)
+                        rv.adapter = PopularAdapter(popularNewsList, context!!)
                     }
                 })
             }
             Constants.POLITICS_NEWS -> {
                 viewModel.fetchPoliticsNews()
                 viewModel.politicsNews?.observe(viewLifecycleOwner, Observer {
-                    if (it != null) {
-                        val list = it.results
-                        for (i in list) {
-                            news_test.append("\n${i.title}")
-                        }
+                    if(it != null) {
+                        // Recycler View
+                        // add each line from database to array list, then set up layout manager and adapter
+                        categoryNewsList.addAll(it.results)
+                        rv.layoutManager = LinearLayoutManager(context)
+                        rv.adapter = CategoryAdapter(categoryNewsList, context!!)
                     }
                 })
             }

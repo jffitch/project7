@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.mathgeniusguide.project7.R
 import com.mathgeniusguide.project7.util.OnSwipeTouchListener
@@ -32,7 +31,17 @@ class Search: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setSwipeListener(view)
-        search_test.text = if (screen == 0) "Search" else "Notifications"
+        when (screen) {
+            0 -> {
+                notificationText.visibility = View.GONE
+                notificationSwitch.visibility = View.GONE
+            }
+            1 -> {
+                beginDate.visibility = View.GONE
+                endDate.visibility = View.GONE
+                searchButton.visibility = View.GONE
+            }
+        }
     }
 
     private fun setSwipeListener(view: View) {
