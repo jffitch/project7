@@ -45,6 +45,12 @@ class News: Fragment() {
         setSwipeListener(view)
 
         fetch(position)
+        backArrow.setOnClickListener {
+            rv.visibility = View.VISIBLE
+            backArrow.visibility = View.GONE
+            webView.settings.javaScriptEnabled = false
+            webView.visibility = View.GONE
+        }
     }
 
     fun fetch(n: Int) {
@@ -57,7 +63,7 @@ class News: Fragment() {
                         // add each line from database to array list, then set up layout manager and adapter
                         categoryNewsList.addAll(it.results)
                         rv.layoutManager = LinearLayoutManager(context)
-                        rv.adapter = CategoryAdapter(categoryNewsList, context!!)
+                        rv.adapter = CategoryAdapter(categoryNewsList, context!!, rv, webView, backArrow)
                     }
                 })
             }
@@ -69,7 +75,7 @@ class News: Fragment() {
                         // add each line from database to array list, then set up layout manager and adapter
                         popularNewsList.addAll(it.results)
                         rv.layoutManager = LinearLayoutManager(context)
-                        rv.adapter = PopularAdapter(popularNewsList, context!!)
+                        rv.adapter = PopularAdapter(popularNewsList, context!!, rv, webView, backArrow)
                     }
                 })
             }
@@ -81,7 +87,7 @@ class News: Fragment() {
                         // add each line from database to array list, then set up layout manager and adapter
                         categoryNewsList.addAll(it.results)
                         rv.layoutManager = LinearLayoutManager(context)
-                        rv.adapter = CategoryAdapter(categoryNewsList, context!!)
+                        rv.adapter = CategoryAdapter(categoryNewsList, context!!, rv, webView, backArrow)
                     }
                 })
             }
