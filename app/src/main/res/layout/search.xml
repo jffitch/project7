@@ -13,12 +13,14 @@
 
     <EditText android:layout_width="match_parent"
               android:layout_height="wrap_content"
+              android:hint="Begin Date"
               android:id="@+id/beginDate"
               app:layout_constraintTop_toBottomOf="@id/searchBox"
               app:layout_constraintBottom_toTopOf="@id/endDate"/>
 
     <EditText android:layout_width="fill_parent"
               android:layout_height="wrap_content"
+              android:hint="End Date"
               android:id="@+id/endDate"
               app:layout_constraintTop_toBottomOf="@id/beginDate"
               app:layout_constraintBottom_toTopOf="@id/checklist"/>

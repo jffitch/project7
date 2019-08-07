@@ -29,6 +29,7 @@ class News: Fragment() {
             position = it.getInt("position")
         }
         viewModel = NewsViewModel(activity!!.application)
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(

@@ -28,4 +28,20 @@
                   app:argType="integer"
                   android:defaultValue="2"/>
     </fragment>
+    <fragment android:id="@+id/search"
+              android:name="com.mathgeniusguide.project7.fragments.Search"
+              android:label="Search"
+              tools:layout="@layout/search">
+        <argument android:name="screen"
+                  app:argType="integer"
+                  android:defaultValue="0"/>
+    </fragment>
+    <fragment android:id="@+id/notifications"
+              android:name="com.mathgeniusguide.project7.fragments.Search"
+              android:label="Notifications"
+              tools:layout="@layout/search">
+        <argument android:name="screen"
+                  app:argType="integer"
+                  android:defaultValue="1"/>
+    </fragment>
 </navigation>

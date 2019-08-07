@@ -24,7 +24,7 @@ class Search: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.news, container, false)
+        val view = inflater.inflate(R.layout.search, container, false)
         return view
     }
 
