@@ -30,7 +30,7 @@
     </fragment>
     <fragment android:id="@+id/search"
               android:name="com.mathgeniusguide.project7.fragments.Search"
-              android:label="Search"
+              android:label="@string/search"
               tools:layout="@layout/search">
         <argument android:name="screen"
                   app:argType="integer"
@@ -38,7 +38,7 @@
     </fragment>
     <fragment android:id="@+id/notifications"
               android:name="com.mathgeniusguide.project7.fragments.Search"
-              android:label="Notifications"
+              android:label="@string/notifications"
               tools:layout="@layout/search">
         <argument android:name="screen"
                   app:argType="integer"

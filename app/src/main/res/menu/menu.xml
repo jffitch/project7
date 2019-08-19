@@ -2,19 +2,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
             android:id="@+id/search"
-            android:title="Search"
+            android:title="@string/search"
             android:icon="@drawable/search"
             app:showAsAction="always"/>
     <item
             android:id="@+id/notifications"
-            android:title="Notifications"
+            android:title="@string/notifications"
             app:showAsAction="never"/>
     <item
             android:id="@+id/about"
-            android:title="About"
+            android:title="@string/about"
             app:showAsAction="never"/>
     <item
             android:id="@+id/help"
-            android:title="Help"
+            android:title="@string/help"
             app:showAsAction="never"/>
 </menu>

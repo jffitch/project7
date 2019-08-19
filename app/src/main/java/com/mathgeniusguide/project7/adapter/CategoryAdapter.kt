@@ -1,5 +1,6 @@
 package com.mathgeniusguide.project7.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +26,7 @@ class CategoryAdapter (private val items: ArrayList<CategoryResult>, val context
         return ViewHolder(LayoutInflater.from(context).inflate(R.layout.news_item, parent, false))
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // code here controls what's done to the views for each group
         val pos = items[position]

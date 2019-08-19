@@ -11,15 +11,15 @@ import kotlinx.coroutines.launch
 
 class NewsViewModel(application: Application): AndroidViewModel(application) {
 
-    val topNews: MutableLiveData<CategoryResponse?>?
-    val popularNews: MutableLiveData<PopularResponse?>?
-    val politicsNews: MutableLiveData<CategoryResponse?>?
+    val topNews: MutableLiveData<CategoryResponse?>? = MutableLiveData()
+    val popularNews: MutableLiveData<PopularResponse?>? = MutableLiveData()
+    val politicsNews: MutableLiveData<CategoryResponse?>? = MutableLiveData()
 
-    init {
+/*    init {
         topNews = MutableLiveData()
         popularNews = MutableLiveData()
         politicsNews = MutableLiveData()
-    }
+    }*/
 
     fun fetchTopNews() {
         viewModelScope.launch {

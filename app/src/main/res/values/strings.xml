@@ -7,4 +7,33 @@
     <string name="tab_2_label">Politics News</string>
     <string name="notifications">Notifications</string>
     <string name="search">Search</string>
+
+    <!--checkbox-->
+    <string name="arts">Arts</string>
+    <string name="automobiles">Automobiles</string>
+    <string name="books">Books</string>
+    <string name="business">Business</string>
+    <string name="fashion">Fashion</string>
+    <string name="food">Food</string>
+    <string name="health">Health</string>
+    <string name="home">Home</string>
+    <string name="movies">Movies</string>
+    <string name="obituaries">Obituaries</string>
+    <string name="politics">Politics</string>
+    <string name="real_estate">Real Estate</string>
+    <string name="science">Science</string>
+    <string name="sports">Sports</string>
+    <string name="technology">Technology</string>
+    <string name="theater">Theater</string>
+    <string name="travel">Travel</string>
+    <string name="world">World</string>
+
+    <!--search screen-->
+    <string name="begin_date">Begin Date</string>
+    <string name="end_date">End Date</string>
+    <string name="enable_notifications">Enable Notifications</string>
+
+    <!--menu items-->
+    <string name="about">About</string>
+    <string name="help">Help</string>
 </resources>
