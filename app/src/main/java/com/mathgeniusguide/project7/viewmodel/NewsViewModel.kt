@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.mathgeniusguide.project7.api.ApiFactory
 import com.mathgeniusguide.project7.responses.category.CategoryResponse
 import com.mathgeniusguide.project7.responses.popular.PopularResponse
+import com.mathgeniusguide.project7.responses.search.SearchResponse2
 import kotlinx.coroutines.launch
 
 class NewsViewModel(application: Application): AndroidViewModel(application) {
@@ -14,12 +15,7 @@ class NewsViewModel(application: Application): AndroidViewModel(application) {
     val topNews: MutableLiveData<CategoryResponse?>? = MutableLiveData()
     val popularNews: MutableLiveData<PopularResponse?>? = MutableLiveData()
     val politicsNews: MutableLiveData<CategoryResponse?>? = MutableLiveData()
-
-/*    init {
-        topNews = MutableLiveData()
-        popularNews = MutableLiveData()
-        politicsNews = MutableLiveData()
-    }*/
+    val searchNews: MutableLiveData<SearchResponse2>? = MutableLiveData()
 
     fun fetchTopNews() {
         viewModelScope.launch {
@@ -39,4 +35,9 @@ class NewsViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
+    fun fetchSearchNews(query: String, categories: String, beginDate: String, endDate: String) {
+        viewModelScope.launch {
+            searchNews?.postValue(ApiFactory.api.getSearchNews(query, categories, beginDate, endDate).body())
+        }
+    }
 }

@@ -2,7 +2,7 @@ package com.mathgeniusguide.project7.api
 
 import com.mathgeniusguide.project7.responses.category.CategoryResponse
 import com.mathgeniusguide.project7.responses.popular.PopularResponse
-import com.mathgeniusguide.project7.responses.search.SearchResponse
+import com.mathgeniusguide.project7.responses.search.SearchResponse2
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -23,6 +23,5 @@ interface Api {
         @Query("q") query: String,
         @Query("fq") categories: String,
         @Query("begin_date") beginDate: String,
-        @Query("end_date") endDate: String,
-        @Query("sort") sortingOrder: String) : Response<SearchResponse>
+        @Query("end_date") endDate: String) : Response<SearchResponse2>
 }

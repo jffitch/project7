@@ -9,13 +9,13 @@ import android.webkit.WebView
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.mathgeniusguide.project7.responses.category.CategoryResult
 import com.mathgeniusguide.project7.R
+import com.mathgeniusguide.project7.responses.search.SearchResult
 import kotlinx.android.synthetic.main.news_item.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class CategoryAdapter (private val items: ArrayList<CategoryResult>, val context: Context, val rv: RecyclerView, val wv: WebView, val back: ImageView) : RecyclerView.Adapter<CategoryAdapter.ViewHolder> () {
+class SearchAdapter (private val items: ArrayList<SearchResult>, val context: Context, val rv: RecyclerView, val wv: WebView, val back: ImageView) : RecyclerView.Adapter<SearchAdapter.ViewHolder> () {
     override fun getItemCount(): Int {
         return items.size
     }
@@ -29,18 +29,18 @@ class CategoryAdapter (private val items: ArrayList<CategoryResult>, val context
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // code here controls what's done to the views for each group
         val pos = items[position]
-        holder.displayTitle.text = pos.title
-        holder.displayDate.text = convertDate(pos.created_date)
-        holder.displayCategory.text = "${pos.section} > ${pos.subsection}"
+        holder.displayTitle.text = pos.headline.print_headline
+        holder.displayDate.text = convertDate(pos.pub_date)
+        holder.displayCategory.text = "${pos.section_name} > ${pos.subsection_name}"
         if (pos.multimedia.size != 0) {
-            Glide.with(context).load(pos.multimedia[0].url).into(holder.displayImage)
+            Glide.with(context).load("https://nytimes.com/${pos.multimedia[0].url}").into(holder.displayImage)
         }
         holder.parent.setOnClickListener {
-            wv.loadUrl(pos.url)
+            wv.loadUrl(pos.web_url)
             wv.settings.javaScriptEnabled = true
             wv.visibility = View.VISIBLE
-            rv.visibility = View.GONE
             back.visibility = View.VISIBLE
+            rv.visibility = View.GONE
         }
     }
 
