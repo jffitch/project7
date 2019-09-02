@@ -1,15 +1,25 @@
 package com.mathgeniusguide.project7.fragments
 
+import android.app.AlarmManager
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mathgeniusguide.project7.MainActivity
 import com.mathgeniusguide.project7.R
 import com.mathgeniusguide.project7.adapter.SearchAdapter
+import com.mathgeniusguide.project7.notifications.NotificationReceiver
 import com.mathgeniusguide.project7.responses.search.SearchResult
 import com.mathgeniusguide.project7.util.OnSwipeTouchListener
 import com.mathgeniusguide.project7.viewmodel.NewsViewModel
@@ -20,12 +30,13 @@ import java.util.*
 
 class Search: Fragment() {
     lateinit var viewModel: NewsViewModel
+    lateinit var viewList: ArrayList<CheckBox>
     val searchNewsList = ArrayList<SearchResult>()
     var dateBegin = ""
     var dateEnd = ""
     var searchTerm = ""
-    var categories = ""
     var screen: Int = 0
+    var pref: SharedPreferences? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +57,7 @@ class Search: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewList = arrayListOf(arts, automobiles, books, business, fashion, food, health, home, movies, obituaries, politics, realestate, science, sports, technology, theater, travel, world)
         setSwipeListener(view)
         when (screen) {
             0 -> {
@@ -54,9 +66,15 @@ class Search: Fragment() {
                 buttonSearch()
             }
             1 -> {
+                pref = context?.getSharedPreferences("com.mathgeniusguide.project7.pref", 0)
+                for (i in viewList) {
+                    i.isChecked = pref?.getBoolean(resources.getResourceEntryName(i.id), false) ?: false
+                }
+                notificationSwitch.isChecked = pref?.getBoolean("switch", false) ?: false
+                searchBox.setText(pref?.getString("search", "") ?: "")
                 beginDate.visibility = View.GONE
                 endDate.visibility = View.GONE
-                searchButton.visibility = View.GONE
+                searchButton.text = "SAVE"
                 buttonNotification()
             }
         }
@@ -76,20 +94,18 @@ class Search: Fragment() {
             dateEnd = endDate.text.toString()
             fixDates()
 
-            categories = setCategories()
-
-            viewModel.fetchSearchNews(searchTerm, categories, dateBegin, dateEnd)
-            viewModel.searchNews?.observe(viewLifecycleOwner, Observer {
-                if(it != null) {
+            viewModel.fetchSearchNews(searchTerm, getCategories(), dateBegin, dateEnd)
+            viewModel.searchNews?.observe(viewLifecycleOwner, Observer {searchResponse ->
+                if(searchResponse != null) {
                     // Recycler View
                     // add each line from database to array list, then set up layout manager and adapter
-                    searchNewsList.addAll(it.response.docs)
+                    searchNewsList.addAll(searchResponse.response.docs)
                     rv.layoutManager = LinearLayoutManager(context)
                     rv.adapter = SearchAdapter(searchNewsList, context!!, rv, webView, backArrow)
                 }
             })
 
-            backArrow.setOnClickListener {
+            backArrow.setOnClickListener {view ->
                 rv.visibility = View.VISIBLE
                 backArrow.visibility = View.GONE
                 webView.settings.javaScriptEnabled = false
@@ -99,7 +115,30 @@ class Search: Fragment() {
     }
 
     private fun buttonNotification() {
+        searchButton.setOnClickListener {
+            val editor = pref?.edit()
+            for (i in viewList) {
+                editor?.putBoolean(resources.getResourceEntryName(i.id), i.isChecked)
+            }
+            editor?.putBoolean("switch", notificationSwitch.isChecked)
+            editor?.putString("search", searchBox.text.toString())
+            editor?.apply()
 
+            val alarmManager = context!!.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            val intent = Intent(context, NotificationReceiver::class.java)
+            intent.putExtra("title", "Search For: ${searchBox.text}")
+            intent.putExtra("message", "Categories: ${getCategories()}")
+            val pendingIntent = PendingIntent.getBroadcast(context, 1, intent, 0)
+            alarmManager.cancel(pendingIntent)
+
+            if (notificationSwitch.isChecked) {
+                val calendar = Calendar.getInstance()
+                calendar.set(Calendar.HOUR_OF_DAY, 8)
+                calendar.set(Calendar.MINUTE, 0)
+                calendar.set(Calendar.SECOND, 0)
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+            }
+        }
     }
 
     private fun fixDates() {
@@ -135,8 +174,7 @@ class Search: Fragment() {
         dateEnd = sdf.format(Date(today.time - Math.min(timeBegin, timeEnd).toLong() * 86400000)) + "T23:59:59Z"
     }
 
-    private fun setCategories(): String {
-        val viewList: ArrayList<CheckBox> = arrayListOf(arts, automobiles, books, business, fashion, food, health, home, movies, obituaries, politics, realestate, science, sports, technology, theater, travel, world)
+    private fun getCategories(): String {
         var string = ""
         for (i in viewList) {
             if (i.isChecked) {
