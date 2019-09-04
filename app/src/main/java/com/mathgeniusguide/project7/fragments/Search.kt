@@ -1,7 +1,6 @@
 package com.mathgeniusguide.project7.fragments
 
 import android.app.AlarmManager
-import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -11,12 +10,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.mathgeniusguide.project7.MainActivity
 import com.mathgeniusguide.project7.R
 import com.mathgeniusguide.project7.adapter.SearchAdapter
 import com.mathgeniusguide.project7.notifications.NotificationReceiver
@@ -126,8 +122,8 @@ class Search: Fragment() {
 
             val alarmManager = context!!.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             val intent = Intent(context, NotificationReceiver::class.java)
-            intent.putExtra("title", "Search For: ${searchBox.text}")
-            intent.putExtra("message", "Categories: ${getCategories()}")
+            intent.putExtra("searchTerm", searchBox.text.toString())
+            intent.putExtra("categories", getCategories())
             val pendingIntent = PendingIntent.getBroadcast(context, 1, intent, 0)
             alarmManager.cancel(pendingIntent)
 
