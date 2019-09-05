@@ -2,6 +2,7 @@ package com.mathgeniusguide.project7.fragments
 
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.app.job.JobInfo
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -23,6 +24,14 @@ import kotlinx.android.synthetic.main.search.*
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
+import android.content.ComponentName
+import android.content.Context.JOB_SCHEDULER_SERVICE
+import androidx.core.content.ContextCompat.getSystemService
+import android.app.job.JobScheduler
+import android.os.PersistableBundle
+import androidx.lifecycle.ViewModelProviders
+import com.mathgeniusguide.project7.notifications.NotificationJobService
+
 
 class Search: Fragment() {
     lateinit var viewModel: NewsViewModel
@@ -32,6 +41,7 @@ class Search: Fragment() {
     var dateEnd = ""
     var searchTerm = ""
     var screen: Int = 0
+    var newsCount = 0
     var pref: SharedPreferences? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +49,7 @@ class Search: Fragment() {
         arguments?.let {
             screen = it.getInt("screen")
         }
-        viewModel = NewsViewModel(activity!!.application)
+        viewModel = ViewModelProviders.of(this).get(NewsViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -112,6 +122,7 @@ class Search: Fragment() {
 
     private fun buttonNotification() {
         searchButton.setOnClickListener {
+            // save checkboxes and notification switch in SharedPreferences
             val editor = pref?.edit()
             for (i in viewList) {
                 editor?.putBoolean(resources.getResourceEntryName(i.id), i.isChecked)
@@ -120,20 +131,7 @@ class Search: Fragment() {
             editor?.putString("search", searchBox.text.toString())
             editor?.apply()
 
-            val alarmManager = context!!.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            val intent = Intent(context, NotificationReceiver::class.java)
-            intent.putExtra("searchTerm", searchBox.text.toString())
-            intent.putExtra("categories", getCategories())
-            val pendingIntent = PendingIntent.getBroadcast(context, 1, intent, 0)
-            alarmManager.cancel(pendingIntent)
-
-            if (notificationSwitch.isChecked) {
-                val calendar = Calendar.getInstance()
-                calendar.set(Calendar.HOUR_OF_DAY, 8)
-                calendar.set(Calendar.MINUTE, 0)
-                calendar.set(Calendar.SECOND, 0)
-                alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
-            }
+            notificationSetup()
         }
     }
 
@@ -171,6 +169,7 @@ class Search: Fragment() {
     }
 
     private fun getCategories(): String {
+        // for each checkbox: if it's checked, add it to the string
         var string = ""
         for (i in viewList) {
             if (i.isChecked) {
@@ -178,6 +177,36 @@ class Search: Fragment() {
             }
         }
         return string
+    }
+
+    private fun notificationSetup() {
+        val scheduler = context!!.getApplicationContext().getSystemService(JOB_SCHEDULER_SERVICE) as JobScheduler
+        val componentName = ComponentName(context?.getApplicationContext(), NotificationJobService::class.java)
+
+        if (notificationSwitch.isChecked) {
+            val categories = getCategories()
+            val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            val today = Date()
+            val dateBegin = sdf.format(today) + "T00:00:00Z"
+            val dateEnd = sdf.format(Date(today.time + 86400000)) + "T23:59:59Z"
+            val bundle = PersistableBundle();
+
+            viewModel.fetchSearchNews(searchTerm, categories, dateBegin, dateEnd)
+            viewModel.searchNews?.observe(viewLifecycleOwner, Observer { searchNews ->
+                newsCount = searchNews.response.docs.size
+            })
+
+            bundle.putInt("dailynews", newsCount);
+            bundle.putString("searchTerm", searchTerm);
+            bundle.putString("categories", categories);
+            bundle.putString("dateBegin", dateBegin);
+            bundle.putString("dateEnd", dateEnd);
+
+            val jobInfo = JobInfo.Builder(0, componentName).setPeriodic(86400 * 1000).setExtras(bundle).build();
+            scheduler.schedule(jobInfo);
+        } else {
+            scheduler.cancelAll()
+        }
     }
 
     private fun setSwipeListener(view: View) {
