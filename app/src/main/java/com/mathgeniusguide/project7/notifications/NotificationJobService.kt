@@ -1,19 +1,21 @@
 package com.mathgeniusguide.project7.notifications
 
-import android.app.Notification;
-import android.app.PendingIntent;
+import android.app.Notification
+import android.app.PendingIntent
 import android.app.job.JobParameters;
 import android.app.job.JobService;
-import android.content.Intent;
-import android.os.Bundle;
+import android.content.Intent
+import android.util.Log
+import androidx.core.app.NotificationCompat
 
-import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.core.content.ContextCompat;
 import com.mathgeniusguide.project7.MainActivity
 import com.mathgeniusguide.project7.R
-
-
+import com.mathgeniusguide.project7.api.ApiFactory
+import com.mathgeniusguide.project7.responses.search.SearchResponseFull
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 /** Job service to show notifications once a day **/
 class NotificationJobService : JobService() {
@@ -23,19 +25,16 @@ class NotificationJobService : JobService() {
     private var categories = ""
     private var dateBegin = ""
     private var dateEnd = ""
+    private var notificationSent = false
 
     override fun onStartJob(params: JobParameters): Boolean {
-        newsCount = params.extras.getInt("newsCount")
         searchTerm = params.extras.getString("searchTerm")
         categories = params.extras.getString("categories")
         dateBegin = params.extras.getString("dateBegin")
         dateEnd = params.extras.getString("dateEnd")
         notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext())
 
-        Thread {
-            if (newsCount != 0)
-                checkForNotifications()
-        }.start()
+        searchForNews()
         return true
     }
 
@@ -43,42 +42,44 @@ class NotificationJobService : JobService() {
         return true
     }
 
-    private fun checkForNotifications() {
-        val bigTextStyle = NotificationCompat.BigTextStyle()
-            .bigText("Tap to go to the articles")
-            .setBigContentTitle("There is ${newsCount} news about ${searchTerm} to read today!")
-            .setSummaryText("Your daily news report")
-        val notifyIntent = Intent(this, MainActivity::class.java)
-        val bundle = Bundle()
-        bundle.putString("searchTerm", searchTerm)
-        bundle.putString("categories", categories)
-        bundle.putString("dateBegin", dateBegin)
-        bundle.putString("dateEnd", dateEnd)
-        notifyIntent.putExtras(bundle)
-        notifyIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        val notifyPendingIntent = PendingIntent.getActivity(this, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-        val dismissIntent = Intent(this, BigTextIntentService::class.java)
-        dismissIntent.action = BigTextIntentService.ACTION_DISMISS
-        val dismissPendingIntent = PendingIntent.getService(this, 0, dismissIntent, 0)
-        val dismissAction = NotificationCompat.Action.Builder(R.drawable.search, "Dismiss", dismissPendingIntent).build()
-        val notificationCompatBuilder = NotificationCompat.Builder(applicationContext, "channel1")
-        GlobalNotificationBuilder.setNotificationCompatBuilderInstance(notificationCompatBuilder)
-        var notification: Notification? = null
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            notification = notificationCompatBuilder.setStyle(bigTextStyle)
-                .setContentTitle("There is ${newsCount} news about ${searchTerm} to read today!")
-                .setContentText("NewsReader")
-                .setSmallIcon(R.drawable.notification_template_icon_bg)
-                .setContentIntent(notifyPendingIntent)
-                .setDefaults(NotificationCompat.DEFAULT_ALL)
-                .setColor(ContextCompat.getColor(applicationContext, R.color.colorPrimary))
-                .setCategory(Notification.CATEGORY_REMINDER)
-                .addAction(dismissAction)
-                .setAutoCancel(true)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                .build()
-        }
-        notificationManagerCompat.notify(1, notification!!)
+    private fun searchForNews() {
+        val searchNewsNotSuspended =
+            ApiFactory.api.getSearchNewsNotSuspended(searchTerm, categories, dateBegin, dateEnd)
+
+        searchNewsNotSuspended.enqueue(object : Callback<SearchResponseFull> {
+            override fun onResponse(call: Call<SearchResponseFull>, response: Response<SearchResponseFull>) {
+                if (response.isSuccessful) {
+                    val newsCount = response.body()?.response?.docs?.size ?: 0
+                    if (newsCount > 0) {
+                        sendNotification(newsCount, searchTerm, categories, dateBegin, dateEnd)
+                        val list = response.body()?.response?.docs
+                        for (item in list!!) {
+                            Log.d("NotificationJobService", item.headline.main)
+                        }
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<SearchResponseFull>, t: Throwable) {
+
+            }
+        })
+    }
+
+    private fun sendNotification(newsCount: Int, searchTerm: String, categories: String, dateBegin: String, dateEnd: String) {
+        val notificationManager = NotificationManagerCompat.from(applicationContext)
+        val intent = Intent(applicationContext, MainActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(applicationContext, 0, intent, 0)
+        val title = "News Found"
+        val message = "${newsCount} new ${categories} items involving ${searchTerm}."
+
+        val notification = NotificationCompat.Builder(applicationContext, "notificationChannel")
+            .setSmallIcon(R.drawable.image_placeholder)
+            .setContentTitle(title)
+            .setContentText(message)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
+            .build()
+        notificationManager.notify(1, notification)
     }
 }

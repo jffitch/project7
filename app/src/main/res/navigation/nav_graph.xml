@@ -8,6 +8,8 @@
               android:name="com.mathgeniusguide.project7.fragments.News"
               android:label="@string/tab_0_label"
               tools:layout="@layout/news">
+        <action android:id="@+id/load_from_notification"
+                app:destination="@id/search"/>
         <argument android:name="position"
                   app:argType="integer"
                   android:defaultValue="0"/>

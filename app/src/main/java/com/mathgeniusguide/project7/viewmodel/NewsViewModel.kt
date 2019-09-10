@@ -2,42 +2,52 @@ package com.mathgeniusguide.project7.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.mathgeniusguide.project7.api.ApiFactory
 import com.mathgeniusguide.project7.responses.category.CategoryResponse
 import com.mathgeniusguide.project7.responses.popular.PopularResponse
-import com.mathgeniusguide.project7.responses.search.SearchResponse2
+import com.mathgeniusguide.project7.responses.search.SearchResponseFull
 import kotlinx.coroutines.launch
 
-class NewsViewModel(application: Application): AndroidViewModel(application) {
+class NewsViewModel(application: Application) : AndroidViewModel(application) {
 
-    val topNews: MutableLiveData<CategoryResponse?>? = MutableLiveData()
-    val popularNews: MutableLiveData<PopularResponse?>? = MutableLiveData()
-    val politicsNews: MutableLiveData<CategoryResponse?>? = MutableLiveData()
-    val searchNews: MutableLiveData<SearchResponse2>? = MutableLiveData()
+    val _topNews: MutableLiveData<CategoryResponse?>? = MutableLiveData()
+    val _popularNews: MutableLiveData<PopularResponse?>? = MutableLiveData()
+    val _politicsNews: MutableLiveData<CategoryResponse?>? = MutableLiveData()
+    val _searchNews: MutableLiveData<SearchResponseFull>? = MutableLiveData()
+
+    val topNews: LiveData<CategoryResponse?>?
+        get() = _topNews
+    val popularNews: LiveData<PopularResponse?>?
+        get() = _popularNews
+    val politicsNews: LiveData<CategoryResponse?>?
+        get() = _politicsNews
+    val searchNews: LiveData<SearchResponseFull>?
+        get() = _searchNews
 
     fun fetchTopNews() {
         viewModelScope.launch {
-            topNews?.postValue(ApiFactory.api.getTopStories().body())
+            _topNews?.postValue(ApiFactory.api.getTopStories().body())
         }
     }
 
     fun fetchPopularNews() {
         viewModelScope.launch {
-            popularNews?.postValue(ApiFactory.api.getPopularNews().body())
+            _popularNews?.postValue(ApiFactory.api.getPopularNews().body())
         }
     }
 
     fun fetchPoliticsNews() {
         viewModelScope.launch {
-            politicsNews?.postValue(ApiFactory.api.getPoliticsNews().body())
+            _politicsNews?.postValue(ApiFactory.api.getPoliticsNews().body())
         }
     }
 
     fun fetchSearchNews(query: String, categories: String, beginDate: String, endDate: String) {
         viewModelScope.launch {
-            searchNews?.postValue(ApiFactory.api.getSearchNews(query, categories, beginDate, endDate).body())
+            _searchNews?.postValue(ApiFactory.api.getSearchNews(query, categories, beginDate, endDate).body())
         }
     }
 }

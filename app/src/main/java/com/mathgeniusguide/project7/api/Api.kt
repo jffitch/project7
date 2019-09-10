@@ -2,7 +2,8 @@ package com.mathgeniusguide.project7.api
 
 import com.mathgeniusguide.project7.responses.category.CategoryResponse
 import com.mathgeniusguide.project7.responses.popular.PopularResponse
-import com.mathgeniusguide.project7.responses.search.SearchResponse2
+import com.mathgeniusguide.project7.responses.search.SearchResponseFull
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -23,5 +24,12 @@ interface Api {
         @Query("q") query: String,
         @Query("fq") categories: String,
         @Query("begin_date") beginDate: String,
-        @Query("end_date") endDate: String) : Response<SearchResponse2>
+        @Query("end_date") endDate: String) : Response<SearchResponseFull>
+
+    @GET("search/v2/articlesearch.json")
+    fun getSearchNewsNotSuspended(
+        @Query("q") query: String,
+        @Query("fq") categories: String,
+        @Query("begin_date") beginDate: String,
+        @Query("end_date") endDate: String) : Call<SearchResponseFull>
 }

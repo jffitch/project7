@@ -1,10 +1,6 @@
 package com.mathgeniusguide.project7.fragments
 
-import android.app.AlarmManager
-import android.app.PendingIntent
 import android.app.job.JobInfo
-import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,7 +12,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mathgeniusguide.project7.R
 import com.mathgeniusguide.project7.adapter.SearchAdapter
-import com.mathgeniusguide.project7.notifications.NotificationReceiver
 import com.mathgeniusguide.project7.responses.search.SearchResult
 import com.mathgeniusguide.project7.util.OnSwipeTouchListener
 import com.mathgeniusguide.project7.viewmodel.NewsViewModel
@@ -26,7 +21,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import android.content.ComponentName
 import android.content.Context.JOB_SCHEDULER_SERVICE
-import androidx.core.content.ContextCompat.getSystemService
 import android.app.job.JobScheduler
 import android.os.PersistableBundle
 import androidx.lifecycle.ViewModelProviders
@@ -93,7 +87,7 @@ class Search: Fragment() {
             endDate.visibility = View.GONE
             checklist.visibility = View.GONE
             searchButton.visibility = View.GONE
-            rv.visibility = View.VISIBLE
+            searchRV.visibility = View.VISIBLE
 
             searchTerm = searchBox.text.toString()
             dateBegin = beginDate.text.toString()
@@ -106,16 +100,16 @@ class Search: Fragment() {
                     // Recycler View
                     // add each line from database to array list, then set up layout manager and adapter
                     searchNewsList.addAll(searchResponse.response.docs)
-                    rv.layoutManager = LinearLayoutManager(context)
-                    rv.adapter = SearchAdapter(searchNewsList, context!!, rv, webView, backArrow)
+                    searchRV.layoutManager = LinearLayoutManager(context)
+                    searchRV.adapter = SearchAdapter(searchNewsList, context!!, searchRV, searchWebView, searchBackArrow)
                 }
             })
 
-            backArrow.setOnClickListener {view ->
-                rv.visibility = View.VISIBLE
-                backArrow.visibility = View.GONE
-                webView.settings.javaScriptEnabled = false
-                webView.visibility = View.GONE
+            searchBackArrow.setOnClickListener { view ->
+                searchRV.visibility = View.VISIBLE
+                searchBackArrow.visibility = View.GONE
+                searchWebView.settings.javaScriptEnabled = false
+                searchWebView.visibility = View.GONE
             }
         }
     }
