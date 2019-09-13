@@ -38,32 +38,19 @@ class News: Fragment() {
 
         val intent = activity!!.intent
         if (intent != null && intent.extras != null) {
+            // get extras from intent and save as variables
             val extras = intent.extras!!
             val searchTerm = extras.getString("searchTerm")!!
             val categories = extras.getString("categories")!!
             val dateBegin = extras.getString("dateBegin")!!
             val dateEnd = extras.getString("dateEnd")!!
+
+            // fetch search news using intent extras, and observe
+            viewModel.fetchSearchNews(searchTerm, categories, dateBegin, dateEnd)
+
+            // navigate to Search fragment
             val navController = Navigation.findNavController(activity as Activity, R.id.nav_host_fragment);
             navController.navigate(R.id.load_from_notification);
-
-            viewModel.fetchSearchNews(searchTerm, categories, dateBegin, dateEnd)
-            viewModel.searchNews?.observe(viewLifecycleOwner, Observer {searchResponse ->
-                if(searchResponse != null) {
-                    // Recycler View
-                    // add each line from database to array list, then set up layout manager and adapter
-                    val searchNewsList = java.util.ArrayList<SearchResult>()
-                    searchNewsList.addAll(searchResponse.response.docs)
-                    searchRV.layoutManager = LinearLayoutManager(context)
-                    searchRV.adapter = SearchAdapter(searchNewsList, context!!, searchRV, searchWebView, searchBackArrow)
-
-                    searchBox.visibility = View.GONE
-                    beginDate.visibility = View.GONE
-                    endDate.visibility = View.GONE
-                    checklist.visibility = View.GONE
-                    searchButton.visibility = View.GONE
-                    searchRV.visibility = View.VISIBLE
-                }
-            })
         }
     }
 
@@ -80,7 +67,10 @@ class News: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setSwipeListener(view)
 
+        // fetch news based on which tab is selected
         fetch(position)
+
+        // set up back arrow to return to search results
         newsBackArrow.setOnClickListener {
             newsRV.visibility = View.VISIBLE
             newsBackArrow.visibility = View.GONE
@@ -92,11 +82,12 @@ class News: Fragment() {
     fun fetch(n: Int) {
         when (n) {
             Constants.TOP_NEWS -> {
+                // fetch relevant news and observe
                 viewModel.fetchTopNews()
                 viewModel.topNews?.observe(viewLifecycleOwner, Observer {
                     if(it != null) {
                         // Recycler View
-                        // add each line from database to array list, then set up layout manager and adapter
+                        // add each line from search to array list, then set up layout manager and adapter
                         categoryNewsList.addAll(it.results)
                         newsRV.layoutManager = LinearLayoutManager(context)
                         newsRV.adapter = CategoryAdapter(categoryNewsList, context!!, newsRV, newsWebView, newsBackArrow)
@@ -104,11 +95,12 @@ class News: Fragment() {
                 })
             }
             Constants.POPULAR_NEWS -> {
+                // fetch relevant news and observe
                 viewModel.fetchPopularNews()
                 viewModel.popularNews?.observe(viewLifecycleOwner, Observer {
                     if(it != null) {
                         // Recycler View
-                        // add each line from database to array list, then set up layout manager and adapter
+                        // add each line from search to array list, then set up layout manager and adapter
                         popularNewsList.addAll(it.results)
                         newsRV.layoutManager = LinearLayoutManager(context)
                         newsRV.adapter = PopularAdapter(popularNewsList, context!!, newsRV, newsWebView, newsBackArrow)
@@ -116,11 +108,12 @@ class News: Fragment() {
                 })
             }
             Constants.POLITICS_NEWS -> {
+                // fetch relevant news and observe
                 viewModel.fetchPoliticsNews()
                 viewModel.politicsNews?.observe(viewLifecycleOwner, Observer {
                     if(it != null) {
                         // Recycler View
-                        // add each line from database to array list, then set up layout manager and adapter
+                        // add each line from search to array list, then set up layout manager and adapter
                         categoryNewsList.addAll(it.results)
                         newsRV.layoutManager = LinearLayoutManager(context)
                         newsRV.adapter = CategoryAdapter(categoryNewsList, context!!, newsRV, newsWebView, newsBackArrow)

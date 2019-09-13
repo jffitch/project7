@@ -29,15 +29,21 @@ class PopularAdapter (private val items: ArrayList<PopularResult>, val context: 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // code here controls what's done to the views for each group
         val pos = items[position]
+        // set title to fetched title
         holder.displayTitle.text = pos.title
+        // set date to fetched date, converted to "MMMM d, yyyy" format
         holder.displayDate.text = convertDate(pos.published_date)
+        // set category to fetched section
         holder.displayCategory.text = pos.section
+        // load fetched image into ImageView using Glide
         if (pos.media.size != 0 && pos.media[0].mediaMetadata.size != 0) {
             Glide.with(context).load(pos.media[0].mediaMetadata[0].url).into(holder.displayImage)
         }
         holder.parent.setOnClickListener {
+            // load fetched url into WebView
             wv.loadUrl(pos.url)
             wv.settings.javaScriptEnabled = true
+            // WebView becomes visible to view webpage
             wv.visibility = View.VISIBLE
             rv.visibility = View.GONE
             back.visibility = View.VISIBLE

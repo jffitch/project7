@@ -26,6 +26,7 @@ interface Api {
         @Query("begin_date") beginDate: String,
         @Query("end_date") endDate: String) : Response<SearchResponseFull>
 
+    // for use in JobService
     @GET("search/v2/articlesearch.json")
     fun getSearchNewsNotSuspended(
         @Query("q") query: String,

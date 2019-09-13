@@ -13,11 +13,13 @@ import kotlinx.coroutines.launch
 
 class NewsViewModel(application: Application) : AndroidViewModel(application) {
 
+    // declare MutableLiveData variables for use in this class
     val _topNews: MutableLiveData<CategoryResponse?>? = MutableLiveData()
     val _popularNews: MutableLiveData<PopularResponse?>? = MutableLiveData()
     val _politicsNews: MutableLiveData<CategoryResponse?>? = MutableLiveData()
     val _searchNews: MutableLiveData<SearchResponseFull>? = MutableLiveData()
 
+    // declare LiveData variables for observing in other classes
     val topNews: LiveData<CategoryResponse?>?
         get() = _topNews
     val popularNews: LiveData<PopularResponse?>?
@@ -27,24 +29,22 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
     val searchNews: LiveData<SearchResponseFull>?
         get() = _searchNews
 
+    // fetch news
     fun fetchTopNews() {
         viewModelScope.launch {
             _topNews?.postValue(ApiFactory.api.getTopStories().body())
         }
     }
-
     fun fetchPopularNews() {
         viewModelScope.launch {
             _popularNews?.postValue(ApiFactory.api.getPopularNews().body())
         }
     }
-
     fun fetchPoliticsNews() {
         viewModelScope.launch {
             _politicsNews?.postValue(ApiFactory.api.getPoliticsNews().body())
         }
     }
-
     fun fetchSearchNews(query: String, categories: String, beginDate: String, endDate: String) {
         viewModelScope.launch {
             _searchNews?.postValue(ApiFactory.api.getSearchNews(query, categories, beginDate, endDate).body())

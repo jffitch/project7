@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.news_item.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
+// include views as arguments so their visibility can be changed in the onClick functions
 class CategoryAdapter (private val items: ArrayList<CategoryResult>, val context: Context, val rv: RecyclerView, val wv: WebView, val back: ImageView) : RecyclerView.Adapter<CategoryAdapter.ViewHolder> () {
     override fun getItemCount(): Int {
         return items.size
@@ -29,15 +30,21 @@ class CategoryAdapter (private val items: ArrayList<CategoryResult>, val context
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // code here controls what's done to the views for each group
         val pos = items[position]
+        // set title to fetched title
         holder.displayTitle.text = pos.title
+        // set date to fetched date, converted to "MMMM d, yyyy" format
         holder.displayDate.text = convertDate(pos.created_date)
+        // set category to fetched section and subsection
         holder.displayCategory.text = "${pos.section} > ${pos.subsection}"
+        // load fetched image into ImageView using Glide
         if (pos.multimedia.size != 0) {
             Glide.with(context).load(pos.multimedia[0].url).into(holder.displayImage)
         }
         holder.parent.setOnClickListener {
+            // load fetched url into WebView
             wv.loadUrl(pos.url)
             wv.settings.javaScriptEnabled = true
+            // WebView becomes visible to view webpage
             wv.visibility = View.VISIBLE
             rv.visibility = View.GONE
             back.visibility = View.VISIBLE

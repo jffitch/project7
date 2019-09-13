@@ -16,6 +16,8 @@ import com.mathgeniusguide.project7.responses.search.SearchResponseFull
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.*
 
 /** Job service to show notifications once a day **/
 class NotificationJobService : JobService() {
@@ -28,10 +30,14 @@ class NotificationJobService : JobService() {
     private var notificationSent = false
 
     override fun onStartJob(params: JobParameters): Boolean {
+        // get Search Term and Categories from bundle
         searchTerm = params.extras.getString("searchTerm")
         categories = params.extras.getString("categories")
-        dateBegin = params.extras.getString("dateBegin")
-        dateEnd = params.extras.getString("dateEnd")
+        // set date range to between yesterday at 0:00:00 and today at 23:59:59
+        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val today = Date()
+        dateBegin = sdf.format(today) + "T00:00:00Z"
+        dateEnd = sdf.format(Date(today.time + 86400000)) + "T23:59:59Z"
         notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext())
 
         searchForNews()

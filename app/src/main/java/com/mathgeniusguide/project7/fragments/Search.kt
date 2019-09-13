@@ -25,6 +25,7 @@ import android.app.job.JobScheduler
 import android.os.PersistableBundle
 import androidx.lifecycle.ViewModelProviders
 import com.mathgeniusguide.project7.notifications.NotificationJobService
+import com.mathgeniusguide.project7.util.Constants
 
 
 class Search: Fragment() {
@@ -57,31 +58,71 @@ class Search: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        // create list of all CheckBoxes to iterate through for loop
         viewList = arrayListOf(arts, automobiles, books, business, fashion, food, health, home, movies, obituaries, politics, realestate, science, sports, technology, theater, travel, world)
         setSwipeListener(view)
         when (screen) {
-            0 -> {
+            Constants.SEARCH_SCREEN -> {
+                // Search screen
+                // make Notification views invisible
                 notificationText.visibility = View.GONE
                 notificationSwitch.visibility = View.GONE
+                // set button to activate Search function when clicked
                 buttonSearch()
             }
-            1 -> {
+            Constants.NOTIFICATION_SCREEN -> {
+                // Notification screen
+                // load SharedPreferences to decide state of CheckBoxes and Search Box
                 pref = context?.getSharedPreferences("com.mathgeniusguide.project7.pref", 0)
                 for (i in viewList) {
                     i.isChecked = pref?.getBoolean(resources.getResourceEntryName(i.id), false) ?: false
                 }
                 notificationSwitch.isChecked = pref?.getBoolean("switch", false) ?: false
                 searchBox.setText(pref?.getString("search", "") ?: "")
+                // make Search views invisible
                 beginDate.visibility = View.GONE
                 endDate.visibility = View.GONE
+                // set button to activate Notification function when clicked, and set its text to "SAVE"
                 searchButton.text = "SAVE"
                 buttonNotification()
+            }
+            Constants.LOADED_SCREEN -> {
+                // make only RecyclerView visible
+                searchBox.visibility = View.GONE
+                beginDate.visibility = View.GONE
+                endDate.visibility = View.GONE
+                checklist.visibility = View.GONE
+                searchButton.visibility = View.GONE
+                searchRV.visibility = View.VISIBLE
+                notificationText.visibility = View.GONE
+                notificationSwitch.visibility = View.GONE
+
+                // activate Back arrow to return to RecyclerView after loading a WebView
+                searchBackArrow.setOnClickListener { view ->
+                    searchRV.visibility = View.VISIBLE
+                    searchBackArrow.visibility = View.GONE
+                    searchWebView.settings.javaScriptEnabled = false
+                    searchWebView.visibility = View.GONE
+                }
+
+                // observe searchNews and populate RecyclerView
+                viewModel.searchNews?.observe(viewLifecycleOwner, Observer {searchResponse ->
+                    if(searchResponse != null) {
+                        // Recycler View
+                        // add each line from search to array list, then set up layout manager and adapter
+                        val searchNewsList = java.util.ArrayList<SearchResult>()
+                        searchNewsList.addAll(searchResponse.response.docs)
+                        searchRV.layoutManager = LinearLayoutManager(context)
+                        searchRV.adapter = SearchAdapter(searchNewsList, context!!, searchRV, searchWebView, searchBackArrow)
+                    }
+                })
             }
         }
     }
 
     private fun buttonSearch() {
         searchButton.setOnClickListener {
+            // make starting views invisible and the RecyclerView visible
             searchBox.visibility = View.GONE
             beginDate.visibility = View.GONE
             endDate.visibility = View.GONE
@@ -89,11 +130,14 @@ class Search: Fragment() {
             searchButton.visibility = View.GONE
             searchRV.visibility = View.VISIBLE
 
+            // get values from the EditTexts
             searchTerm = searchBox.text.toString()
             dateBegin = beginDate.text.toString()
             dateEnd = endDate.text.toString()
+            // make sure user inputted dates are valid and are between one year ago and today
             fixDates()
 
+            // fetch data
             viewModel.fetchSearchNews(searchTerm, getCategories(), dateBegin, dateEnd)
             viewModel.searchNews?.observe(viewLifecycleOwner, Observer {searchResponse ->
                 if(searchResponse != null) {
@@ -105,6 +149,7 @@ class Search: Fragment() {
                 }
             })
 
+            // activate Back arrow to return to RecyclerView after loading a WebView
             searchBackArrow.setOnClickListener { view ->
                 searchRV.visibility = View.VISIBLE
                 searchBackArrow.visibility = View.GONE
@@ -125,10 +170,12 @@ class Search: Fragment() {
             editor?.putString("search", searchBox.text.toString())
             editor?.apply()
 
+            // set up notification Job Service
             notificationSetup()
         }
     }
 
+    // make sure user inputted dates are valid and are between one year ago and today
     private fun fixDates() {
         val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val today = Date()
@@ -173,28 +220,19 @@ class Search: Fragment() {
         return string
     }
 
+    // set up notification Job Service
     private fun notificationSetup() {
         val scheduler = context!!.getApplicationContext().getSystemService(JOB_SCHEDULER_SERVICE) as JobScheduler
         val componentName = ComponentName(context?.getApplicationContext(), NotificationJobService::class.java)
 
+        // activate Job Service if Notification Switch is checked, cancel if not checked
         if (notificationSwitch.isChecked) {
+            // get Search Term and categories, and save them to a bundle for the Job Service
+            searchTerm = searchBox.text.toString()
             val categories = getCategories()
-            val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-            val today = Date()
-            val dateBegin = sdf.format(today) + "T00:00:00Z"
-            val dateEnd = sdf.format(Date(today.time + 86400000)) + "T23:59:59Z"
             val bundle = PersistableBundle();
-
-            viewModel.fetchSearchNews(searchTerm, categories, dateBegin, dateEnd)
-            viewModel.searchNews?.observe(viewLifecycleOwner, Observer { searchNews ->
-                newsCount = searchNews.response.docs.size
-            })
-
-            bundle.putInt("dailynews", newsCount);
             bundle.putString("searchTerm", searchTerm);
             bundle.putString("categories", categories);
-            bundle.putString("dateBegin", dateBegin);
-            bundle.putString("dateEnd", dateEnd);
 
             val jobInfo = JobInfo.Builder(0, componentName).setPeriodic(86400 * 1000).setExtras(bundle).build();
             scheduler.schedule(jobInfo);

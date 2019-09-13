@@ -29,15 +29,21 @@ class SearchAdapter (private val items: ArrayList<SearchResult>, val context: Co
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // code here controls what's done to the views for each group
         val pos = items[position]
+        // set title to fetched headline
         holder.displayTitle.text = pos.headline.print_headline
+        // set date to fetched date, converted to "MMMM d, yyyy" format
         holder.displayDate.text = convertDate(pos.pub_date)
+        // set category to fetched section and subsection
         holder.displayCategory.text = "${pos.section_name} > ${pos.subsection_name}"
+        // load fetched image into ImageView using Glide
         if (pos.multimedia.size != 0) {
             Glide.with(context).load("https://nytimes.com/${pos.multimedia[0].url}").into(holder.displayImage)
         }
         holder.parent.setOnClickListener {
+            // load fetched url into WebView
             wv.loadUrl(pos.web_url)
             wv.settings.javaScriptEnabled = true
+            // WebView becomes visible to view webpage
             wv.visibility = View.VISIBLE
             back.visibility = View.VISIBLE
             rv.visibility = View.GONE

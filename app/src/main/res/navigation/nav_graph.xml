@@ -9,7 +9,7 @@
               android:label="@string/tab_0_label"
               tools:layout="@layout/news">
         <action android:id="@+id/load_from_notification"
-                app:destination="@id/search"/>
+                app:destination="@id/load"/>
         <argument android:name="position"
                   app:argType="integer"
                   android:defaultValue="0"/>
@@ -45,5 +45,13 @@
         <argument android:name="screen"
                   app:argType="integer"
                   android:defaultValue="1"/>
+    </fragment>
+    <fragment android:id="@+id/load"
+              android:name="com.mathgeniusguide.project7.fragments.Search"
+              android:label="@string/search"
+              tools:layout="@layout/search">
+        <argument android:name="screen"
+                  app:argType="integer"
+                  android:defaultValue="2"/>
     </fragment>
 </navigation>
