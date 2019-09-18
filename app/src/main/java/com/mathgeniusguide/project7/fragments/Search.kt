@@ -29,7 +29,7 @@ import com.mathgeniusguide.project7.util.Constants
 
 
 class Search: Fragment() {
-    lateinit var viewModel: NewsViewModel
+    val viewModel by lazy {ViewModelProviders.of(activity!!).get(NewsViewModel::class.java)}
     lateinit var viewList: ArrayList<CheckBox>
     val searchNewsList = ArrayList<SearchResult>()
     var dateBegin = ""
@@ -44,7 +44,6 @@ class Search: Fragment() {
         arguments?.let {
             screen = it.getInt("screen")
         }
-        viewModel = ViewModelProviders.of(this).get(NewsViewModel::class.java)
     }
 
     override fun onCreateView(

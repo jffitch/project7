@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mathgeniusguide.project7.R
@@ -23,7 +24,8 @@ import kotlinx.android.synthetic.main.news.*
 import kotlinx.android.synthetic.main.search.*
 
 class News: Fragment() {
-    lateinit var viewModel: NewsViewModel
+    val viewModel by lazy { ViewModelProviders.of(activity!!).get(NewsViewModel::class.java)}
+
     val categoryNewsList = ArrayList<CategoryResult>()
     val popularNewsList = ArrayList<PopularResult>()
     var position: Int = 0
@@ -33,17 +35,16 @@ class News: Fragment() {
         arguments?.let {
             position = it.getInt("position")
         }
-        viewModel = NewsViewModel(activity!!.application)
         setHasOptionsMenu(true)
 
         val intent = activity!!.intent
         if (intent != null && intent.extras != null) {
             // get extras from intent and save as variables
             val extras = intent.extras!!
-            val searchTerm = extras.getString("searchTerm")!!
-            val categories = extras.getString("categories")!!
-            val dateBegin = extras.getString("dateBegin")!!
-            val dateEnd = extras.getString("dateEnd")!!
+            val searchTerm = extras.getString("searchTerm") ?: ""
+            val categories = extras.getString("categories") ?: ""
+            val dateBegin = extras.getString("dateBegin") ?: ""
+            val dateEnd = extras.getString("dateEnd") ?: ""
 
             // fetch search news using intent extras, and observe
             viewModel.fetchSearchNews(searchTerm, categories, dateBegin, dateEnd)

@@ -75,6 +75,10 @@ class NotificationJobService : JobService() {
     private fun sendNotification(newsCount: Int, searchTerm: String, categories: String, dateBegin: String, dateEnd: String) {
         val notificationManager = NotificationManagerCompat.from(applicationContext)
         val intent = Intent(applicationContext, MainActivity::class.java)
+        intent.putExtra("searchTerm", searchTerm)
+        intent.putExtra("categories", categories)
+        intent.putExtra("dateBegin", dateBegin)
+        intent.putExtra("dateEnd", dateEnd)
         val pendingIntent = PendingIntent.getActivity(applicationContext, 0, intent, 0)
         val title = "News Found"
         val message = "${newsCount} new ${categories} items involving ${searchTerm}."
