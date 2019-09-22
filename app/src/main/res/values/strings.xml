@@ -32,6 +32,7 @@
     <string name="begin_date">Begin Date</string>
     <string name="end_date">End Date</string>
     <string name="enable_notifications">Enable Notifications</string>
+    <string name="save">Save</string>
 
     <!--menu items-->
     <string name="about">About</string>

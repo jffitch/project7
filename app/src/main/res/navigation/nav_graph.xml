@@ -3,13 +3,11 @@
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/nav_graph"
-            app:startDestination="@id/News0">
+            app:startDestination="@id/splash">
     <fragment android:id="@+id/News0"
               android:name="com.mathgeniusguide.project7.fragments.News"
               android:label="@string/tab_0_label"
               tools:layout="@layout/news">
-        <action android:id="@+id/load_from_notification"
-                app:destination="@id/load"/>
         <argument android:name="position"
                   app:argType="integer"
                   android:defaultValue="0"/>
@@ -34,24 +32,19 @@
               android:name="com.mathgeniusguide.project7.fragments.Search"
               android:label="@string/search"
               tools:layout="@layout/search">
-        <argument android:name="screen"
-                  app:argType="integer"
-                  android:defaultValue="0"/>
     </fragment>
     <fragment android:id="@+id/notifications"
-              android:name="com.mathgeniusguide.project7.fragments.Search"
+              android:name="com.mathgeniusguide.project7.fragments.Notifications"
               android:label="@string/notifications"
-              tools:layout="@layout/search">
-        <argument android:name="screen"
-                  app:argType="integer"
-                  android:defaultValue="1"/>
+              tools:layout="@layout/notification">
     </fragment>
-    <fragment android:id="@+id/load"
-              android:name="com.mathgeniusguide.project7.fragments.Search"
-              android:label="@string/search"
-              tools:layout="@layout/search">
-        <argument android:name="screen"
-                  app:argType="integer"
-                  android:defaultValue="2"/>
+    <fragment android:id="@+id/splash"
+              android:name="com.mathgeniusguide.project7.fragments.Splash"
+              android:label="@string/app_name"
+              tools:layout="@layout/splash">
+        <action android:id="@+id/load_notification"
+                app:destination="@id/search"/>
+        <action android:id="@+id/load_normal"
+                app:destination="@id/News0"/>
     </fragment>
 </navigation>

@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="horizontal">
+    <LinearLayout android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="1"
+                  android:orientation="vertical">
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:orientation="horizontal">
+            <CheckBox android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/arts"/>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="@string/arts"
+                      android:textSize="14sp"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:orientation="horizontal">
+            <CheckBox android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/automobiles"/>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="@string/automobiles"
+                      android:textSize="13sp"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:orientation="horizontal">
+            <CheckBox android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/books"/>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="@string/books"
+                      android:textSize="14sp"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:orientation="horizontal">
+            <CheckBox android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/business"/>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="@string/business"
+                      android:textSize="14sp"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:orientation="horizontal">
+            <CheckBox android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/fashion"/>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="@string/fashion"
+                      android:textSize="14sp"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:orientation="horizontal">
+            <CheckBox android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/food"/>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="@string/food"
+                      android:textSize="14sp"/>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="1"
+                  android:orientation="vertical">
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:orientation="horizontal">
+            <CheckBox android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/health"/>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="@string/health"
+                      android:textSize="14sp"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:orientation="horizontal">
+            <CheckBox android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/home"/>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="@string/home"
+                      android:textSize="14sp"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:orientation="horizontal">
+            <CheckBox android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/movies"/>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="@string/movies"
+                      android:textSize="14sp"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:orientation="horizontal">
+            <CheckBox android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/obituaries"/>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="@string/obituaries"
+                      android:textSize="14sp"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:orientation="horizontal">
+            <CheckBox android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/politics"/>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="@string/politics"
+                      android:textSize="14sp"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:orientation="horizontal">
+            <CheckBox android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/realestate"/>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="@string/real_estate"
+                      android:textSize="13sp"/>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="1"
+                  android:orientation="vertical">
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:orientation="horizontal">
+            <CheckBox android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/science"/>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="@string/science"
+                      android:textSize="14sp"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:orientation="horizontal">
+            <CheckBox android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/sports"/>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="@string/sports"
+                      android:textSize="14sp"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:orientation="horizontal">
+            <CheckBox android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/technology"/>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="@string/technology"
+                      android:textSize="14sp"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:orientation="horizontal">
+            <CheckBox android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/theater"/>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="@string/theater"
+                      android:textSize="14sp"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:orientation="horizontal">
+            <CheckBox android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/travel"/>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="@string/travel"
+                      android:textSize="14sp"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:orientation="horizontal">
+            <CheckBox android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/world"/>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="@string/world"
+                      android:textSize="14sp"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

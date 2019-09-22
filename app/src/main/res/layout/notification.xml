@@ -7,36 +7,35 @@
     <EditText android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:hint="@string/search"
-              android:id="@+id/searchQuery"
+              android:id="@+id/notificationQuery"
               app:layout_constraintBottom_toTopOf="@id/beginDate"
               app:layout_constraintTop_toTopOf="parent"/>
-
-    <EditText android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:hint="@string/begin_date"
-              android:id="@+id/beginDate"
-              app:layout_constraintTop_toBottomOf="@id/searchQuery"
-              app:layout_constraintBottom_toTopOf="@id/endDate"/>
-
-    <EditText android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
-              android:hint="@string/end_date"
-              android:id="@+id/endDate"
-              app:layout_constraintTop_toBottomOf="@id/beginDate"
-              app:layout_constraintBottom_toTopOf="@id/checklist"/>
 
     <include layout="@layout/checklist"
              android:layout_height="wrap_content"
              android:layout_width="wrap_content"
              android:id="@+id/checklist"
-             app:layout_constraintTop_toBottomOf="@id/endDate"
-             app:layout_constraintBottom_toTopOf="@id/searchButton"/>
+             app:layout_constraintTop_toBottomOf="@id/notificationQuery"
+             app:layout_constraintBottom_toTopOf="@id/notificationText"/>
+
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/enable_notifications"
+              app:layout_constraintTop_toBottomOf="@id/checklist"
+              app:layout_constraintStart_toStartOf="parent"
+              android:id="@+id/notificationText"/>
+
+    <Switch android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/checklist"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/notificationSwitch"/>
 
     <Button android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/searchButton"
-            android:text="@string/search"
-            app:layout_constraintTop_toBottomOf="@id/checklist"
+            android:id="@+id/saveButton"
+            android:text="@string/save"
+            app:layout_constraintTop_toBottomOf="@id/notificationText"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 

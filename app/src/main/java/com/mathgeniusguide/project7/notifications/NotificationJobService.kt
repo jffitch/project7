@@ -79,6 +79,7 @@ class NotificationJobService : JobService() {
         intent.putExtra("categories", categories)
         intent.putExtra("dateBegin", dateBegin)
         intent.putExtra("dateEnd", dateEnd)
+        intent.putExtra("isNotification", true)
         val pendingIntent = PendingIntent.getActivity(applicationContext, 0, intent, 0)
         val title = "News Found"
         val message = "${newsCount} new ${categories} items involving ${searchTerm}."

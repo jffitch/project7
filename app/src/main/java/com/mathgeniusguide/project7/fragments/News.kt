@@ -36,23 +36,6 @@ class News: Fragment() {
             position = it.getInt("position")
         }
         setHasOptionsMenu(true)
-
-        val intent = activity!!.intent
-        if (intent != null && intent.extras != null) {
-            // get extras from intent and save as variables
-            val extras = intent.extras!!
-            val searchTerm = extras.getString("searchTerm") ?: ""
-            val categories = extras.getString("categories") ?: ""
-            val dateBegin = extras.getString("dateBegin") ?: ""
-            val dateEnd = extras.getString("dateEnd") ?: ""
-
-            // fetch search news using intent extras, and observe
-            viewModel.fetchSearchNews(searchTerm, categories, dateBegin, dateEnd)
-
-            // navigate to Search fragment
-            val navController = Navigation.findNavController(activity as Activity, R.id.nav_host_fragment);
-            navController.navigate(R.id.load_from_notification);
-        }
     }
 
     override fun onCreateView(
