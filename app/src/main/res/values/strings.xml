@@ -7,6 +7,7 @@
     <string name="tab_2_label">Politics News</string>
     <string name="notifications">Notifications</string>
     <string name="search">Search</string>
+    <string name="search_result">Search Result</string>
 
     <!--checkbox-->
     <string name="arts">Arts</string>

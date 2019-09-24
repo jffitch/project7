@@ -32,6 +32,8 @@
               android:name="com.mathgeniusguide.project7.fragments.Search"
               android:label="@string/search"
               tools:layout="@layout/search">
+        <action android:id="@+id/show_result"
+                app:destination="@id/search_result"/>
     </fragment>
     <fragment android:id="@+id/notifications"
               android:name="com.mathgeniusguide.project7.fragments.Notifications"
@@ -43,8 +45,13 @@
               android:label="@string/app_name"
               tools:layout="@layout/splash">
         <action android:id="@+id/load_notification"
-                app:destination="@id/search"/>
+                app:destination="@id/search_result"/>
         <action android:id="@+id/load_normal"
                 app:destination="@id/News0"/>
+    </fragment>
+    <fragment android:id="@+id/search_result"
+              android:name="com.mathgeniusguide.project7.fragments.SearchView"
+              android:label="@string/search_result"
+              tools:layout="@layout/searchview">
     </fragment>
 </navigation>

@@ -1,6 +1,5 @@
 package com.mathgeniusguide.project7.fragments
 
-import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,20 +7,15 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mathgeniusguide.project7.R
 import com.mathgeniusguide.project7.adapter.CategoryAdapter
 import com.mathgeniusguide.project7.adapter.PopularAdapter
-import com.mathgeniusguide.project7.adapter.SearchAdapter
 import com.mathgeniusguide.project7.responses.category.CategoryResult
 import com.mathgeniusguide.project7.responses.popular.PopularResult
-import com.mathgeniusguide.project7.responses.search.SearchResult
 import com.mathgeniusguide.project7.util.Constants
-import com.mathgeniusguide.project7.util.OnSwipeTouchListener
 import com.mathgeniusguide.project7.viewmodel.NewsViewModel
 import kotlinx.android.synthetic.main.news.*
-import kotlinx.android.synthetic.main.search.*
 
 class News: Fragment() {
     val viewModel by lazy { ViewModelProviders.of(activity!!).get(NewsViewModel::class.java)}
@@ -49,7 +43,6 @@ class News: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setSwipeListener(view)
 
         // fetch news based on which tab is selected
         fetch(position)
@@ -104,14 +97,6 @@ class News: Fragment() {
                     }
                 })
             }
-        }
-    }
-
-    private fun setSwipeListener(view: View) {
-        context?.let {
-            view.setOnTouchListener(object : OnSwipeTouchListener(it) {
-
-            })
         }
     }
 }

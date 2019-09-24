@@ -9,9 +9,6 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.fragment.app.Fragment
 import com.mathgeniusguide.project7.R
-import com.mathgeniusguide.project7.responses.search.SearchResult
-import com.mathgeniusguide.project7.util.OnSwipeTouchListener
-import com.mathgeniusguide.project7.viewmodel.NewsViewModel
 import kotlinx.android.synthetic.main.notification.*
 import kotlinx.android.synthetic.main.checklist.*
 import java.util.*
@@ -19,10 +16,7 @@ import android.content.ComponentName
 import android.content.Context.JOB_SCHEDULER_SERVICE
 import android.app.job.JobScheduler
 import android.os.PersistableBundle
-import androidx.lifecycle.ViewModelProviders
 import com.mathgeniusguide.project7.notifications.NotificationJobService
-import com.mathgeniusguide.project7.util.Constants
-
 
 class Notifications : Fragment() {
     lateinit var viewList: ArrayList<CheckBox>
@@ -62,7 +56,6 @@ class Notifications : Fragment() {
             travel,
             world
         )
-        setSwipeListener(view)
         // load SharedPreferences to decide state of CheckBoxes and Query
         loadSaved();
         // set button to activate Notification function when clicked
@@ -124,14 +117,6 @@ class Notifications : Fragment() {
             scheduler.schedule(jobInfo);
         } else {
             scheduler.cancelAll()
-        }
-    }
-
-    private fun setSwipeListener(view: View) {
-        context?.let {
-            view.setOnTouchListener(object : OnSwipeTouchListener(it) {
-
-            })
         }
     }
 }

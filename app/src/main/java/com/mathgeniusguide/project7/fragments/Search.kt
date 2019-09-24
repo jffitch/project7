@@ -1,6 +1,5 @@
 package com.mathgeniusguide.project7.fragments
 
-import android.app.job.JobInfo
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,35 +7,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.mathgeniusguide.project7.R
-import com.mathgeniusguide.project7.adapter.SearchAdapter
 import com.mathgeniusguide.project7.responses.search.SearchResult
-import com.mathgeniusguide.project7.util.OnSwipeTouchListener
-import com.mathgeniusguide.project7.viewmodel.NewsViewModel
 import kotlinx.android.synthetic.main.search.*
 import kotlinx.android.synthetic.main.checklist.*
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
-import android.content.ComponentName
-import android.content.Context.JOB_SCHEDULER_SERVICE
-import android.app.job.JobScheduler
-import android.os.PersistableBundle
-import androidx.lifecycle.ViewModelProviders
-import com.mathgeniusguide.project7.notifications.NotificationJobService
-import com.mathgeniusguide.project7.util.Constants
+import androidx.navigation.fragment.findNavController
 
 class Search : Fragment() {
-    val viewModel by lazy { ViewModelProviders.of(activity!!).get(NewsViewModel::class.java) }
     lateinit var viewList: ArrayList<CheckBox>
     val searchNewsList = ArrayList<SearchResult>()
     var dateBegin = ""
     var dateEnd = ""
     var searchTerm = ""
     var isNotification = false
-    var newsCount = 0
     var pref: SharedPreferences? = null
 
     override fun onCreateView(
@@ -71,49 +57,9 @@ class Search : Fragment() {
             travel,
             world
         )
-        setSwipeListener(view)
         // load SharedPreferences to decide state of CheckBoxes and Query
         loadSaved();
         buttonSearch();
-        if (isNotification) {
-            // make starting views invisible and RecyclerView visible
-            searchQuery.visibility = View.GONE
-            beginDate.visibility = View.GONE
-            endDate.visibility = View.GONE
-            checklist.visibility = View.GONE
-            searchButton.visibility = View.GONE
-            searchRV.visibility = View.VISIBLE
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        observeViewModel()
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        arguments?.let {
-            searchTerm = it.getString("searchTerm", "")
-            val categories = it.getString("categories", "")
-            dateBegin = it.getString("dateBegin", "")
-            dateEnd = it.getString("dateEnd", "")
-            isNotification = it.getBoolean("isNotification", false)
-            viewModel.fetchSearchNews(searchTerm, categories, dateBegin, dateEnd)
-        }
-    }
-
-    private fun observeViewModel() {
-        viewModel.searchNews?.observe(viewLifecycleOwner, Observer { searchResponse ->
-            if (searchResponse != null) {
-                // Recycler View
-                // add each line from database to array list, then set up layout manager and adapter
-                searchNewsList.addAll(searchResponse.response.docs)
-                searchRV.layoutManager = LinearLayoutManager(context)
-                searchRV.adapter =
-                        SearchAdapter(searchNewsList, context!!, searchRV, searchWebView, searchBackArrow)
-            }
-        })
     }
 
     private fun buttonSearch() {
@@ -126,14 +72,6 @@ class Search : Fragment() {
             editor?.putString("searchQuery", searchQuery.text.toString())
             editor?.apply()
 
-            // make starting views invisible and RecyclerView visible
-            searchQuery.visibility = View.GONE
-            beginDate.visibility = View.GONE
-            endDate.visibility = View.GONE
-            checklist.visibility = View.GONE
-            searchButton.visibility = View.GONE
-            searchRV.visibility = View.VISIBLE
-
             // get values from the EditTexts
             searchTerm = searchQuery.text.toString()
             dateBegin = beginDate.text.toString()
@@ -141,17 +79,12 @@ class Search : Fragment() {
             // make sure user inputted dates are valid and are between one year ago and today
             fixDates()
 
-            // fetch data
-            viewModel.fetchSearchNews(searchTerm, getCategories(), dateBegin, dateEnd)
-            observeViewModel()
-
-            // activate Back arrow to return to RecyclerView after loading a WebView
-            searchBackArrow.setOnClickListener { view ->
-                searchRV.visibility = View.VISIBLE
-                searchBackArrow.visibility = View.GONE
-                searchWebView.settings.javaScriptEnabled = false
-                searchWebView.visibility = View.GONE
-            }
+            val bundle = Bundle()
+            bundle.putString("searchTerm", searchTerm)
+            bundle.putString("categories", getCategories())
+            bundle.putString("dateBegin", dateBegin)
+            bundle.putString("dateEnd", dateEnd)
+            findNavController().navigate(R.id.show_result, bundle)
         }
     }
 
@@ -206,13 +139,5 @@ class Search : Fragment() {
             }
         }
         return string
-    }
-
-    private fun setSwipeListener(view: View) {
-        context?.let {
-            view.setOnTouchListener(object : OnSwipeTouchListener(it) {
-
-            })
-        }
     }
 }
