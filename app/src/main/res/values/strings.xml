@@ -36,6 +36,23 @@
     <string name="save">Save</string>
 
     <!--menu items-->
-    <string name="about">About</string>
-    <string name="help">Help</string>
+    <string name="instructions">Instructions</string>
+
+    <!--instructions-->
+    <string name="tabs">Tabs</string>
+    <string name="tabs1">The app has three tabs: Top News, Most Popular, and Politics News. The app opens in the Top News tab.</string>
+    <string name="tabs2">Each tab shows a list of news relevant to the tab.</string>
+    <string name="search_button">Search Button</string>
+    <string name="search_button1">Clicking the Search Button in the Action Bar displays a search menu with a Query field, Begin Date field, End Date field, and checkboxes for categories.</string>
+    <string name="search_button2">Clicking SEARCH shows a list of news relevant to the search criteria.</string>
+    <string name="search_button3">Search criteria is saved whenever the SEARCH button is clicked.</string>
+    <string name="enabling_notifications">Enabling Notifications</string>
+    <string name="enabling_notifications1">Clicking the Notifications option in the Overflow Menu displays a Query field, checkboxes for categories, and a switch to decide whether to enable notifications.</string>
+    <string name="enabling_notifications2">Clicking SAVE saves the criteria. If the Notification Switch is turned on when SAVE is clicked, a daily notification is sent if new news matches the criteria.</string>
+    <string name="news_list">News List</string>
+    <string name="news_list1">News Lists appear when a tab is selected, when a search is performed, or when the app is opened by clicking a notification.</string>
+    <string name="news_list2">Clicking an item in a News List displays the relevant webpage for that item.</string>
+    <string name="news_list3">A Back Arrow appears when clicking an item in the News List. Clicking the Back Arrow closes the webpage and returns to the News List.</string>
+    <string name="loading_from_notifications">Loading From Notifications</string>
+    <string name="loading_from_notifications1">Clicking a Notification opens the app to a News List matching what would be displayed if a search were performed using the criteria set when enabling notifications, and using yesterday and today as the Begin Date and End Date.</string>
 </resources>

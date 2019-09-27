@@ -10,11 +10,7 @@
             android:title="@string/notifications"
             app:showAsAction="never"/>
     <item
-            android:id="@+id/about"
-            android:title="@string/about"
-            app:showAsAction="never"/>
-    <item
-            android:id="@+id/help"
-            android:title="@string/help"
+            android:id="@+id/instructions"
+            android:title="@string/instructions"
             app:showAsAction="never"/>
 </menu>

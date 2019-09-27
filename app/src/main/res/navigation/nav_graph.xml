@@ -40,6 +40,11 @@
               android:label="@string/notifications"
               tools:layout="@layout/notification">
     </fragment>
+    <fragment android:id="@+id/instructions"
+              android:name="com.mathgeniusguide.project7.fragments.Instructions"
+              android:label="@string/instructions"
+              tools:layout="@layout/instructions">
+    </fragment>
     <fragment android:id="@+id/splash"
               android:name="com.mathgeniusguide.project7.fragments.Splash"
               android:label="@string/app_name"

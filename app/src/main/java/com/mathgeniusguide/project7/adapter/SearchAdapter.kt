@@ -34,7 +34,7 @@ class SearchAdapter (private val items: ArrayList<SearchResult>, val context: Co
         // set date to fetched date, converted to "MMMM d, yyyy" format
         holder.displayDate.text = convertDate(pos.pub_date)
         // set category to fetched section and subsection
-        holder.displayCategory.text = "${pos.section_name} > ${pos.subsection_name}"
+        holder.displayCategory.text = "${pos.section_name}${if (pos.subsection_name != null && pos.subsection_name.isNotBlank()) "> ${pos.subsection_name}" else ""}"
         // load fetched image into ImageView using Glide
         if (pos.multimedia.size != 0) {
             Glide.with(context).load("https://nytimes.com/${pos.multimedia[0].url}").into(holder.displayImage)

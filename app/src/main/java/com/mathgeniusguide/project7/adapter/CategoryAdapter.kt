@@ -35,7 +35,7 @@ class CategoryAdapter (private val items: ArrayList<CategoryResult>, val context
         // set date to fetched date, converted to "MMMM d, yyyy" format
         holder.displayDate.text = convertDate(pos.created_date)
         // set category to fetched section and subsection
-        holder.displayCategory.text = "${pos.section} > ${pos.subsection}"
+        holder.displayCategory.text = "${pos.section}${if (pos.subsection != null && pos.subsection.isNotBlank()) "> ${pos.subsection}" else ""}"
         // load fetched image into ImageView using Glide
         if (pos.multimedia.size != 0) {
             Glide.with(context).load(pos.multimedia[0].url).into(holder.displayImage)
