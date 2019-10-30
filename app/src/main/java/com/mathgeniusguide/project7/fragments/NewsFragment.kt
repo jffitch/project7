@@ -1,28 +1,31 @@
-package com.mathgeniusguide.project7.fragments
+package com.mathgeniusguide.project7.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mathgeniusguide.project7.MainActivity
 import com.mathgeniusguide.project7.R
 import com.mathgeniusguide.project7.adapter.CategoryAdapter
 import com.mathgeniusguide.project7.adapter.PopularAdapter
+import com.mathgeniusguide.project7.base.BaseFragment
 import com.mathgeniusguide.project7.responses.category.CategoryResult
 import com.mathgeniusguide.project7.responses.popular.PopularResult
 import com.mathgeniusguide.project7.util.Constants
 import com.mathgeniusguide.project7.viewmodel.NewsViewModel
 import kotlinx.android.synthetic.main.news.*
 
-class News: Fragment() {
+class NewsFragment: BaseFragment() {
+
     val viewModel by lazy { ViewModelProviders.of(activity!!).get(NewsViewModel::class.java)}
 
     val categoryNewsList = ArrayList<CategoryResult>()
     val popularNewsList = ArrayList<PopularResult>()
     var position: Int = 0
+    private var newsBackArrowPressed = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,22 +44,44 @@ class News: Fragment() {
         return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        showActionBarAndNavigationView()
 
         // fetch news based on which tab is selected
         fetch(position)
 
         // set up back arrow to return to search results
         newsBackArrow.setOnClickListener {
+            newsBackArrowPressed = true
             newsRV.visibility = View.VISIBLE
             newsBackArrow.visibility = View.GONE
             newsWebView.settings.javaScriptEnabled = false
             newsWebView.visibility = View.GONE
         }
+
+        viewModel.dataLoading.observe(viewLifecycleOwner, Observer {
+            progressBar.visibility = if(it) View.VISIBLE else View.GONE
+        })
+
+        viewModel.isDataLoadingError.observe(viewLifecycleOwner, Observer {error ->
+            if(!error) {
+                noNewsLayout.visibility = View.GONE
+            } else {
+                noNewsLayout.visibility = View.VISIBLE
+                noNewsIcon.setImageResource(R.drawable.ic_empty_cart)
+                noNewsText.setText(R.string.error_loading)
+            }
+
+        })
     }
 
-    fun fetch(n: Int) {
+    private fun showActionBarAndNavigationView() {
+        (activity as? MainActivity)?.showActionBar()
+        (activity as? MainActivity)?.showBottomNavigationView()
+    }
+
+    private fun fetch(n: Int) {
         when (n) {
             Constants.TOP_NEWS -> {
                 // fetch relevant news and observe
@@ -99,4 +124,13 @@ class News: Fragment() {
             }
         }
     }
+
+    override fun handleBack() {
+        if(newsBackArrowPressed) {
+            newsBackArrowPressed = false
+        } else {
+            activity?.finish()
+        }
+    }
+
 }

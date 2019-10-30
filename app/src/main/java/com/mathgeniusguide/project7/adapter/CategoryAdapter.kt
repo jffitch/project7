@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.mathgeniusguide.project7.responses.category.CategoryResult
 import com.mathgeniusguide.project7.R
+import com.mathgeniusguide.project7.connectivity.convertDate
 import kotlinx.android.synthetic.main.news_item.view.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -33,7 +34,7 @@ class CategoryAdapter (private val items: ArrayList<CategoryResult>, val context
         // set title to fetched title
         holder.displayTitle.text = pos.title
         // set date to fetched date, converted to "MMMM d, yyyy" format
-        holder.displayDate.text = convertDate(pos.created_date)
+        holder.displayDate.text = pos.created_date.convertDate()
         // set category to fetched section and subsection
         holder.displayCategory.text = "${pos.section}${if (pos.subsection != null && pos.subsection.isNotBlank()) "> ${pos.subsection}" else ""}"
         // load fetched image into ImageView using Glide
@@ -49,13 +50,6 @@ class CategoryAdapter (private val items: ArrayList<CategoryResult>, val context
             rv.visibility = View.GONE
             back.visibility = View.VISIBLE
         }
-    }
-
-    fun convertDate(string: String): String {
-        val toDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val date = toDate.parse(string)
-        val toString = SimpleDateFormat("MMMM d, yyyy", Locale.getDefault())
-        return toString.format(date)
     }
 
     class ViewHolder (view : View) : RecyclerView.ViewHolder(view) {

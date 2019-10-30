@@ -1,24 +1,27 @@
-package com.mathgeniusguide.project7.fragments
+package com.mathgeniusguide.project7.ui
 
 import android.app.job.JobInfo
+import android.app.job.JobScheduler
+import android.content.ComponentName
+import android.content.Context.JOB_SCHEDULER_SERVICE
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
-import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.mathgeniusguide.project7.MainActivity
 import com.mathgeniusguide.project7.R
-import kotlinx.android.synthetic.main.notification.*
-import kotlinx.android.synthetic.main.checklist.*
-import java.util.*
-import android.content.ComponentName
-import android.content.Context.JOB_SCHEDULER_SERVICE
-import android.app.job.JobScheduler
-import android.os.PersistableBundle
+import com.mathgeniusguide.project7.base.BaseFragment
 import com.mathgeniusguide.project7.notifications.NotificationJobService
+import kotlinx.android.synthetic.main.checklist.*
+import kotlinx.android.synthetic.main.notification.*
+import java.util.*
 
-class Notifications : Fragment() {
+class NotificationsFragment : BaseFragment() {
+
     lateinit var viewList: ArrayList<CheckBox>
     var searchTerm = ""
     var newsCount = 0
@@ -33,8 +36,11 @@ class Notifications : Fragment() {
         return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        (activity as? MainActivity)?.hideBottomNavigationView()
+
         // create list of all CheckBoxes to iterate through for loop
         viewList = arrayListOf(
             arts,
@@ -60,6 +66,11 @@ class Notifications : Fragment() {
         loadSaved();
         // set button to activate Notification function when clicked
         buttonNotification()
+
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
     }
 
     // load SharedPreferences to decide state of CheckBoxes and Query
@@ -106,7 +117,7 @@ class Notifications : Fragment() {
 
         // activate Job Service if Notification Switch is checked, cancel if not checked
         if (notificationSwitch.isChecked) {
-            // get Search Term and categories, and save them to a bundle for the Job Service
+            // get SearchFragment Term and categories, and save them to a bundle for the Job Service
             searchTerm = notificationQuery.text.toString()
             val categories = getCategories()
             val bundle = PersistableBundle();
@@ -118,5 +129,9 @@ class Notifications : Fragment() {
         } else {
             scheduler.cancelAll()
         }
+    }
+
+    override fun handleBack() {
+        findNavController().navigate(R.id.action_notifications_to_topNews)
     }
 }

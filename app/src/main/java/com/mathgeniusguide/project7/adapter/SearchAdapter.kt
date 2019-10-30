@@ -10,6 +10,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.mathgeniusguide.project7.R
+import com.mathgeniusguide.project7.connectivity.convertDate
 import com.mathgeniusguide.project7.responses.search.SearchResult
 import kotlinx.android.synthetic.main.news_item.view.*
 import java.text.SimpleDateFormat
@@ -32,7 +33,7 @@ class SearchAdapter (private val items: ArrayList<SearchResult>, val context: Co
         // set title to fetched headline
         holder.displayTitle.text = pos.headline.print_headline
         // set date to fetched date, converted to "MMMM d, yyyy" format
-        holder.displayDate.text = convertDate(pos.pub_date)
+        holder.displayDate.text = pos.pub_date.convertDate()
         // set category to fetched section and subsection
         holder.displayCategory.text = "${pos.section_name}${if (pos.subsection_name != null && pos.subsection_name.isNotBlank()) "> ${pos.subsection_name}" else ""}"
         // load fetched image into ImageView using Glide
@@ -48,13 +49,6 @@ class SearchAdapter (private val items: ArrayList<SearchResult>, val context: Co
             back.visibility = View.VISIBLE
             rv.visibility = View.GONE
         }
-    }
-
-    fun convertDate(string: String): String {
-        val toDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val date = toDate.parse(string)
-        val toString = SimpleDateFormat("MMMM d, yyyy", Locale.getDefault())
-        return toString.format(date)
     }
 
     class ViewHolder (view : View) : RecyclerView.ViewHolder(view) {

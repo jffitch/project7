@@ -1,4 +1,4 @@
-package com.mathgeniusguide.project7.fragments
+package com.mathgeniusguide.project7.ui
 
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -6,17 +6,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
-import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.mathgeniusguide.project7.MainActivity
 import com.mathgeniusguide.project7.R
+import com.mathgeniusguide.project7.base.BaseFragment
 import com.mathgeniusguide.project7.responses.search.SearchResult
-import kotlinx.android.synthetic.main.search.*
 import kotlinx.android.synthetic.main.checklist.*
+import kotlinx.android.synthetic.main.search.*
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
-import androidx.navigation.fragment.findNavController
 
-class Search : Fragment() {
+class SearchFragment : BaseFragment() {
+
     lateinit var viewList: ArrayList<CheckBox>
     val searchNewsList = ArrayList<SearchResult>()
     var dateBegin = ""
@@ -24,6 +26,12 @@ class Search : Fragment() {
     var searchTerm = ""
     var isNotification = false
     var pref: SharedPreferences? = null
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,9 +42,11 @@ class Search : Fragment() {
         return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        // create list of all CheckBoxes to iterate through for loop
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        (activity as? MainActivity)?.hideBottomNavigationView()
+
         viewList = arrayListOf(
             arts,
             automobiles,
@@ -87,6 +97,7 @@ class Search : Fragment() {
             findNavController().navigate(R.id.show_result, bundle)
         }
     }
+
 
     // load SharedPreferences to decide state of CheckBoxes and Query
     private fun loadSaved() {
@@ -139,5 +150,9 @@ class Search : Fragment() {
             }
         }
         return string
+    }
+
+    override fun handleBack() {
+        findNavController().navigate(R.id.action_search_to_topNews)
     }
 }

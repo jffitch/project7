@@ -1,21 +1,24 @@
-package com.mathgeniusguide.project7.fragments
+package com.mathgeniusguide.project7.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mathgeniusguide.project7.MainActivity
 import com.mathgeniusguide.project7.R
 import com.mathgeniusguide.project7.adapter.SearchAdapter
+import com.mathgeniusguide.project7.base.BaseFragment
 import com.mathgeniusguide.project7.responses.search.SearchResult
 import com.mathgeniusguide.project7.viewmodel.NewsViewModel
 import kotlinx.android.synthetic.main.searchview.*
 import java.util.*
-import androidx.lifecycle.ViewModelProviders
 
-class SearchView : Fragment() {
+class SearchViewFragment : BaseFragment() {
+
     val viewModel by lazy { ViewModelProviders.of(activity!!).get(NewsViewModel::class.java) }
     val searchNewsList = ArrayList<SearchResult>()
     var dateBegin = ""
@@ -33,6 +36,8 @@ class SearchView : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        (activity as? MainActivity)?.hideBottomNavigationView()
 
         // set up back arrow to return to search results
         searchBackArrow.setOnClickListener {
@@ -72,5 +77,9 @@ class SearchView : Fragment() {
                         SearchAdapter(searchNewsList, context!!, searchRV, searchWebView, searchBackArrow)
             }
         })
+    }
+
+    override fun handleBack() {
+        findNavController().navigate(R.id.action_search_result_to_topNews)
     }
 }

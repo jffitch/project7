@@ -10,6 +10,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.mathgeniusguide.project7.R
+import com.mathgeniusguide.project7.connectivity.convertDate
 import com.mathgeniusguide.project7.responses.popular.PopularResult
 import kotlinx.android.synthetic.main.news_item.view.*
 import java.text.SimpleDateFormat
@@ -32,7 +33,7 @@ class PopularAdapter (private val items: ArrayList<PopularResult>, val context: 
         // set title to fetched title
         holder.displayTitle.text = pos.title
         // set date to fetched date, converted to "MMMM d, yyyy" format
-        holder.displayDate.text = convertDate(pos.published_date)
+        holder.displayDate.text = pos.published_date.convertDate()
         // set category to fetched section
         holder.displayCategory.text = pos.section
         // load fetched image into ImageView using Glide
@@ -48,13 +49,6 @@ class PopularAdapter (private val items: ArrayList<PopularResult>, val context: 
             rv.visibility = View.GONE
             back.visibility = View.VISIBLE
         }
-    }
-
-    fun convertDate(string: String): String {
-        val toDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val date = toDate.parse(string)
-        val toString = SimpleDateFormat("MMMM d, yyyy", Locale.getDefault())
-        return toString.format(date)
     }
 
     class ViewHolder (view : View) : RecyclerView.ViewHolder(view) {

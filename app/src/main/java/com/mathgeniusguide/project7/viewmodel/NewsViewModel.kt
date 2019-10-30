@@ -5,7 +5,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.mathgeniusguide.project7.api.ApiFactory
+import com.mathgeniusguide.project7.api.Api
+import com.mathgeniusguide.project7.connectivity.ConnectivityInterceptor
+import com.mathgeniusguide.project7.connectivity.NoConnectivityException
 import com.mathgeniusguide.project7.responses.category.CategoryResponse
 import com.mathgeniusguide.project7.responses.popular.PopularResponse
 import com.mathgeniusguide.project7.responses.search.SearchResponseFull
@@ -13,11 +15,16 @@ import kotlinx.coroutines.launch
 
 class NewsViewModel(application: Application) : AndroidViewModel(application) {
 
+    private val TAG by lazy { NewsViewModel::class.java.simpleName }
+
     // declare MutableLiveData variables for use in this class
-    val _topNews: MutableLiveData<CategoryResponse?>? = MutableLiveData()
-    val _popularNews: MutableLiveData<PopularResponse?>? = MutableLiveData()
-    val _politicsNews: MutableLiveData<CategoryResponse?>? = MutableLiveData()
-    val _searchNews: MutableLiveData<SearchResponseFull>? = MutableLiveData()
+    // private as MutableLiveData should not be accessible from outside
+    private val _topNews: MutableLiveData<CategoryResponse?>? = MutableLiveData()
+    private val _popularNews: MutableLiveData<PopularResponse?>? = MutableLiveData()
+    private val _politicsNews: MutableLiveData<CategoryResponse?>? = MutableLiveData()
+    private val _searchNews: MutableLiveData<SearchResponseFull>? = MutableLiveData()
+    private val _dataLoading = MutableLiveData<Boolean>()
+    private val _isDataLoadingError = MutableLiveData<Boolean>()
 
     // declare LiveData variables for observing in other classes
     val topNews: LiveData<CategoryResponse?>?
@@ -28,26 +35,74 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
         get() = _politicsNews
     val searchNews: LiveData<SearchResponseFull>?
         get() = _searchNews
+    val dataLoading: LiveData<Boolean>
+        get() = _dataLoading
+    val isDataLoadingError: LiveData<Boolean>
+        get() = _isDataLoadingError
 
     // fetch news
     fun fetchTopNews() {
+        val connectivityInterceptor = ConnectivityInterceptor(getApplication())
+        _dataLoading.value = true
         viewModelScope.launch {
-            _topNews?.postValue(ApiFactory.api.getTopStories().body())
+            try {
+                _topNews?.postValue(Api.invoke(connectivityInterceptor).getTopStories().body())
+                _dataLoading.postValue(false)
+                _isDataLoadingError.postValue(false)
+            } catch (e: NoConnectivityException) {
+                _isDataLoadingError.postValue(true)
+                _dataLoading.postValue(false)
+            }
         }
     }
+
     fun fetchPopularNews() {
+        val connectivityInterceptor = ConnectivityInterceptor(getApplication())
+        _dataLoading.value = true
         viewModelScope.launch {
-            _popularNews?.postValue(ApiFactory.api.getPopularNews().body())
+            try {
+                _popularNews?.postValue(Api.invoke(connectivityInterceptor).getPopularNews().body())
+                _dataLoading.postValue(false)
+                _isDataLoadingError.postValue(false)
+            } catch (e: NoConnectivityException) {
+                _dataLoading.postValue(false)
+                _isDataLoadingError.postValue(true)
+            }
         }
     }
+
     fun fetchPoliticsNews() {
+        val connectivityInterceptor = ConnectivityInterceptor(getApplication())
+        _dataLoading.value = true
         viewModelScope.launch {
-            _politicsNews?.postValue(ApiFactory.api.getPoliticsNews().body())
+            try {
+                _politicsNews?.postValue(Api.invoke(connectivityInterceptor).getPoliticsNews().body())
+                _dataLoading.postValue(false)
+                _isDataLoadingError.postValue(false)
+            } catch (e: NoConnectivityException) {
+                _dataLoading.postValue(false)
+                _isDataLoadingError.postValue(true)
+            }
         }
     }
+
     fun fetchSearchNews(query: String, categories: String, beginDate: String, endDate: String) {
+        val connectivityInterceptor = ConnectivityInterceptor(getApplication())
         viewModelScope.launch {
-            _searchNews?.postValue(ApiFactory.api.getSearchNews(query, categories, beginDate, endDate).body())
+            try {
+                _searchNews?.postValue(
+                    Api.invoke(connectivityInterceptor).getSearchNews(
+                        query,
+                        categories,
+                        beginDate,
+                        endDate
+                    ).body()
+                )
+                _isDataLoadingError.postValue(false)
+
+            } catch (e: NoConnectivityException) {
+                _isDataLoadingError.postValue(true)
+            }
         }
     }
 }

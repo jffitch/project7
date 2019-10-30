@@ -1,4 +1,4 @@
-package com.mathgeniusguide.project7.notifications
+package com.mathgeniusguide.project7.base
 
 import android.app.Application
 import android.app.NotificationChannel

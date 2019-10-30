@@ -1,29 +1,33 @@
 package com.mathgeniusguide.project7
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.navigation.Navigation
 import androidx.navigation.ui.*
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-    lateinit var appBarConfiguration: AppBarConfiguration
-    lateinit var navController: NavController
+
+    private val TAG by lazy { MainActivity::class.java.simpleName }
+
+    private lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        navController = findNavController(nav_host_fragment)
-        appBarConfiguration = AppBarConfiguration(setOf(R.id.News0, R.id.News1, R.id.News2))
-        toolbar.setupWithNavController(navController)
-        tabs.setupWithNavController(navController)
-        setupActionBarWithNavController(navController, appBarConfiguration)
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment)
+        appBarConfiguration = AppBarConfiguration(setOf(R.id.topNews, R.id.mostPopular, R.id.popularNews))
+
+        bottomNav.setupWithNavController(navController)
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -31,11 +35,30 @@ class MainActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
+
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
+
+        return item.onNavDestinationSelected(navController)
+                || super.onOptionsItemSelected(item)
+    }
+
+    fun hideActionBar() {
+        supportActionBar?.hide()
+    }
+
+    fun showActionBar() {
+        supportActionBar?.show()
+    }
+
+    fun hideBottomNavigationView() {
+        bottomNav.visibility = View.GONE
+    }
+
+    fun showBottomNavigationView() {
+        bottomNav.visibility = View.VISIBLE
     }
 }

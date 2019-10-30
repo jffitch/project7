@@ -1,6 +1,5 @@
 package com.mathgeniusguide.project7.notifications
 
-import android.app.Notification
 import android.app.PendingIntent
 import android.app.job.JobParameters;
 import android.app.job.JobService;
@@ -11,7 +10,9 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat;
 import com.mathgeniusguide.project7.MainActivity
 import com.mathgeniusguide.project7.R
-import com.mathgeniusguide.project7.api.ApiFactory
+import com.mathgeniusguide.project7.api.Api
+import com.mathgeniusguide.project7.connectivity.ConnectivityInterceptor
+import com.mathgeniusguide.project7.connectivity.NoConnectivityException
 import com.mathgeniusguide.project7.responses.search.SearchResponseFull
 import retrofit2.Call
 import retrofit2.Callback
@@ -30,7 +31,7 @@ class NotificationJobService : JobService() {
     private var notificationSent = false
 
     override fun onStartJob(params: JobParameters): Boolean {
-        // get Search Term and Categories from bundle
+        // get SearchFragment Term and Categories from bundle
         searchTerm = params.extras.getString("searchTerm")
         categories = params.extras.getString("categories")
         // set date range to between yesterday at 0:00:00 and today at 23:59:59
@@ -49,30 +50,47 @@ class NotificationJobService : JobService() {
     }
 
     private fun searchForNews() {
-        val searchNewsNotSuspended =
-            ApiFactory.api.getSearchNewsNotSuspended(searchTerm, categories, dateBegin, dateEnd)
+        val connectivityInterceptor = ConnectivityInterceptor(applicationContext)
 
-        searchNewsNotSuspended.enqueue(object : Callback<SearchResponseFull> {
-            override fun onResponse(call: Call<SearchResponseFull>, response: Response<SearchResponseFull>) {
-                if (response.isSuccessful) {
-                    val newsCount = response.body()?.response?.docs?.size ?: 0
-                    if (newsCount > 0) {
-                        sendNotification(newsCount, searchTerm, categories, dateBegin, dateEnd)
-                        val list = response.body()?.response?.docs
-                        for (item in list!!) {
-                            Log.d("NotificationJobService", item.headline.main)
+        try {
+            val searchNewsNotSuspended =
+                Api.invoke(connectivityInterceptor)
+                    .getSearchNewsNotSuspended(searchTerm, categories, dateBegin, dateEnd)
+
+            searchNewsNotSuspended.enqueue(object : Callback<SearchResponseFull> {
+                override fun onResponse(
+                    call: Call<SearchResponseFull>,
+                    response: Response<SearchResponseFull>
+                ) {
+                    if (response.isSuccessful) {
+                        val newsCount = response.body()?.response?.docs?.size ?: 0
+                        if (newsCount > 0) {
+                            sendNotification(newsCount, searchTerm, categories, dateBegin, dateEnd)
+                            val list = response.body()?.response?.docs
+                            for (item in list!!) {
+                                Log.d("NotificationJobService", item.headline.main)
+                            }
                         }
                     }
                 }
-            }
 
-            override fun onFailure(call: Call<SearchResponseFull>, t: Throwable) {
+                override fun onFailure(call: Call<SearchResponseFull>, t: Throwable) {
 
-            }
-        })
+                }
+            })
+
+        } catch (e: NoConnectivityException) {
+            Log.e("NotificationJobService", e.localizedMessage)
+        }
     }
 
-    private fun sendNotification(newsCount: Int, searchTerm: String, categories: String, dateBegin: String, dateEnd: String) {
+    private fun sendNotification(
+        newsCount: Int,
+        searchTerm: String,
+        categories: String,
+        dateBegin: String,
+        dateEnd: String
+    ) {
         val notificationManager = NotificationManagerCompat.from(applicationContext)
         val intent = Intent(applicationContext, MainActivity::class.java)
         intent.putExtra("searchTerm", searchTerm)
@@ -80,7 +98,7 @@ class NotificationJobService : JobService() {
         intent.putExtra("dateBegin", dateBegin)
         intent.putExtra("dateEnd", dateEnd)
         val pendingIntent = PendingIntent.getActivity(applicationContext, 0, intent, 0)
-        val title = "News Found"
+        val title = "NewsFragment Found"
         val message = "${newsCount} new ${categories} items involving ${searchTerm}."
 
         val notification = NotificationCompat.Builder(applicationContext, "notificationChannel")
