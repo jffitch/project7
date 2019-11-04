@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-            android:id="@+id/News0"
+            android:id="@+id/topNews"
             android:title="@string/tab_0_label"/>
 
     <item
-            android:id="@+id/News1"
+            android:id="@+id/mostPopular"
             android:title="@string/tab_1_label"/>
 
     <item
-            android:id="@+id/News2"
+            android:id="@+id/politicsNews"
             android:title="@string/tab_2_label"/>
 </menu>

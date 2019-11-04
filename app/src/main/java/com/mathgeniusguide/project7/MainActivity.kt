@@ -23,11 +23,10 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         navController = Navigation.findNavController(this, R.id.nav_host_fragment)
-        appBarConfiguration = AppBarConfiguration(setOf(R.id.topNews, R.id.mostPopular, R.id.popularNews))
+        appBarConfiguration = AppBarConfiguration(setOf(R.id.topNews, R.id.mostPopular, R.id.politicsNews))
 
-        bottomNav.setupWithNavController(navController)
+        tabs.setupWithNavController(navController)
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration)
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -55,10 +54,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun hideBottomNavigationView() {
-        bottomNav.visibility = View.GONE
+        tabs.visibility = View.GONE
     }
 
     fun showBottomNavigationView() {
-        bottomNav.visibility = View.VISIBLE
+        tabs.visibility = View.VISIBLE
     }
 }

@@ -9,6 +9,7 @@ import android.webkit.WebView
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.mathgeniusguide.project7.MainActivity
 import com.mathgeniusguide.project7.responses.category.CategoryResult
 import com.mathgeniusguide.project7.R
 import com.mathgeniusguide.project7.connectivity.convertDate

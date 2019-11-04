@@ -38,6 +38,7 @@ class SearchViewFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         (activity as? MainActivity)?.hideBottomNavigationView()
+        (activity as? MainActivity)?.showActionBar()
 
         // set up back arrow to return to search results
         searchBackArrow.setOnClickListener {
@@ -64,6 +65,22 @@ class SearchViewFragment : BaseFragment() {
             dateEnd = it.getString("dateEnd", "")
             viewModel.fetchSearchNews(searchTerm, categories, dateBegin, dateEnd)
         }
+
+        viewModel.dataLoading.observe(viewLifecycleOwner, Observer {
+            progressBar.visibility = if(it) View.VISIBLE else View.GONE
+        })
+
+        viewModel.isDataLoadingError.observe(viewLifecycleOwner, Observer {error ->
+            if(!error) {
+                noNewsLayout.visibility = View.GONE
+                searchRV.visibility = if (searchWebView.visibility == View.VISIBLE) View.GONE else View.VISIBLE
+            } else {
+                noNewsLayout.visibility = View.VISIBLE
+                noNewsIcon.setImageResource(R.drawable.no_news_icon)
+                noNewsText.setText(R.string.error_loading)
+                searchRV.visibility = View.GONE
+            }
+        })
     }
 
     private fun observeViewModel() {
@@ -72,6 +89,7 @@ class SearchViewFragment : BaseFragment() {
                 // Recycler View
                 // add each line from database to array list, then set up layout manager and adapter
                 searchNewsList.addAll(searchResponse.response.docs)
+                searchNewsList.sortByDescending { it.pub_date }
                 searchRV.layoutManager = LinearLayoutManager(context)
                 searchRV.adapter =
                         SearchAdapter(searchNewsList, context!!, searchRV, searchWebView, searchBackArrow)

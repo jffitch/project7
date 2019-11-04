@@ -67,12 +67,13 @@ class NewsFragment: BaseFragment() {
         viewModel.isDataLoadingError.observe(viewLifecycleOwner, Observer {error ->
             if(!error) {
                 noNewsLayout.visibility = View.GONE
+                newsRV.visibility = if (newsWebView.visibility == View.VISIBLE) View.GONE else View.VISIBLE
             } else {
                 noNewsLayout.visibility = View.VISIBLE
-                noNewsIcon.setImageResource(R.drawable.ic_empty_cart)
+                noNewsIcon.setImageResource(R.drawable.no_news_icon)
                 noNewsText.setText(R.string.error_loading)
+                newsRV.visibility = View.GONE
             }
-
         })
     }
 
@@ -91,6 +92,7 @@ class NewsFragment: BaseFragment() {
                         // Recycler View
                         // add each line from search to array list, then set up layout manager and adapter
                         categoryNewsList.addAll(it.results)
+                        categoryNewsList.sortByDescending { it.created_date }
                         newsRV.layoutManager = LinearLayoutManager(context)
                         newsRV.adapter = CategoryAdapter(categoryNewsList, context!!, newsRV, newsWebView, newsBackArrow)
                     }
@@ -104,6 +106,7 @@ class NewsFragment: BaseFragment() {
                         // Recycler View
                         // add each line from search to array list, then set up layout manager and adapter
                         popularNewsList.addAll(it.results)
+                        popularNewsList.sortByDescending { it.published_date }
                         newsRV.layoutManager = LinearLayoutManager(context)
                         newsRV.adapter = PopularAdapter(popularNewsList, context!!, newsRV, newsWebView, newsBackArrow)
                     }
@@ -117,6 +120,7 @@ class NewsFragment: BaseFragment() {
                         // Recycler View
                         // add each line from search to array list, then set up layout manager and adapter
                         categoryNewsList.addAll(it.results)
+                        categoryNewsList.sortByDescending { it.created_date }
                         newsRV.layoutManager = LinearLayoutManager(context)
                         newsRV.adapter = CategoryAdapter(categoryNewsList, context!!, newsRV, newsWebView, newsBackArrow)
                     }

@@ -1,10 +1,17 @@
 package com.mathgeniusguide.project7.api
 
+import com.mathgeniusguide.project7.connectivity.ConnectivityInterceptor
 import com.mathgeniusguide.project7.responses.category.CategoryResponse
 import com.mathgeniusguide.project7.responses.popular.PopularResponse
 import com.mathgeniusguide.project7.responses.search.SearchResponseFull
+import com.mathgeniusguide.project7.util.Constants
+import com.squareup.moshi.Moshi
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -33,4 +40,42 @@ interface Api {
         @Query("fq") categories: String,
         @Query("begin_date") beginDate: String,
         @Query("end_date") endDate: String) : Call<SearchResponseFull>
+
+
+    companion object {
+        operator fun invoke(
+            connectivityInterceptor: ConnectivityInterceptor
+        ): Api {
+            val requestInterceptor = Interceptor { chain ->
+
+                val url = chain.request()
+                    .url()
+                    .newBuilder()
+                    .addQueryParameter("api-key", Constants.API_KEY)
+                    .build()
+                val request = chain.request()
+                    .newBuilder()
+                    .url(url)
+                    .build()
+
+                return@Interceptor chain.proceed(request)
+            }
+
+            val okHttpClient = OkHttpClient.Builder()
+                .addInterceptor(requestInterceptor)
+                .addInterceptor(connectivityInterceptor)
+                .build()
+
+            val userMoshi = Moshi
+                .Builder()
+                .build()
+
+            return Retrofit.Builder()
+                .client(okHttpClient)
+                .baseUrl(Constants.BASE_URL)
+                .addConverterFactory(MoshiConverterFactory.create(userMoshi))
+                .build()
+                .create(Api::class.java)
+        }
+    }
 }

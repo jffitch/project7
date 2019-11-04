@@ -113,7 +113,7 @@ class NotificationsFragment : BaseFragment() {
     // set up notification Job Service
     private fun notificationSetup() {
         val scheduler = context!!.getApplicationContext().getSystemService(JOB_SCHEDULER_SERVICE) as JobScheduler
-        val componentName = ComponentName(context?.getApplicationContext(), NotificationJobService::class.java)
+        val componentName = ComponentName(context!!.getApplicationContext(), NotificationJobService::class.java)
 
         // activate Job Service if Notification Switch is checked, cancel if not checked
         if (notificationSwitch.isChecked) {

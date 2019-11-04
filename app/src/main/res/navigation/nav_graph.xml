@@ -25,7 +25,7 @@
                 app:argType="integer" />
     </fragment>
     <fragment
-            android:id="@+id/popularNews"
+            android:id="@+id/politicsNews"
             android:name="com.mathgeniusguide.project7.ui.NewsFragment"
             android:label="@string/tab_2_label"
             tools:layout="@layout/news">
