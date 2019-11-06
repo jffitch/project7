@@ -98,8 +98,8 @@ class NotificationJobService : JobService() {
         intent.putExtra("dateBegin", dateBegin)
         intent.putExtra("dateEnd", dateEnd)
         val pendingIntent = PendingIntent.getActivity(applicationContext, 0, intent, 0)
-        val title = "NewsFragment Found"
-        val message = "${newsCount} new ${categories} items involving ${searchTerm}."
+        val title = resources.getString(R.string.notification_title)
+        val message = String.format(resources.getString(R.string.notification_message), newsCount, categories, searchTerm)
 
         val notification = NotificationCompat.Builder(applicationContext, "notificationChannel")
             .setSmallIcon(R.drawable.image_placeholder)
