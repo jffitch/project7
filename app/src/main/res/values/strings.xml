@@ -44,6 +44,9 @@
     <string name="notification_title">News Found</string>
     <string name="notification_message">%1$d new %2$s items involving %3$s.</string>
 
+    <!--splash screen-->
+    <string name="splash_text">Latest news from NYTimes API</string>
+
     <!--instructions-->
     <string name="tabs">Tabs</string>
     <string name="tabs1">The app has three tabs: Top News, Most Popular, and Politics News. The app opens in the Top News tab.</string>
