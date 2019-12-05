@@ -15,5 +15,5 @@ fun String.convertDate(): String {
     val toDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     val date = toDate.parse(this)
     val toString = SimpleDateFormat("MMMM d, yyyy", Locale.getDefault())
-    return toString.format(date) + "XXX"
+    return toString.format(date)
 }
