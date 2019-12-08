@@ -11,6 +11,10 @@
     <string name="search_result">Search Result</string>
     <string name="splash_label">Splash</string>
 
+    <!--section and subsection names-->
+    <string name="section_only">%1$s</string>
+    <string name="section_and_subsection">%1$s > %2$s</string>
+
     <!--checkbox-->
     <string name="arts">Arts</string>
     <string name="automobiles">Automobiles</string>

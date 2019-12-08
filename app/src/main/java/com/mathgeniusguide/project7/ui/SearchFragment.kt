@@ -10,23 +10,21 @@ import androidx.navigation.fragment.findNavController
 import com.mathgeniusguide.project7.MainActivity
 import com.mathgeniusguide.project7.R
 import com.mathgeniusguide.project7.base.BaseFragment
-import com.mathgeniusguide.project7.responses.search.SearchResult
 import kotlinx.android.synthetic.main.checklist.*
 import kotlinx.android.synthetic.main.search.*
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.max
+import kotlin.math.min
 
 class SearchFragment : BaseFragment() {
 
-    lateinit var viewList: ArrayList<CheckBox>
-    val searchNewsList = ArrayList<SearchResult>()
-    var dateBegin = ""
-    var dateEnd = ""
-    var searchTerm = ""
-    var isNotification = false
-    var pref: SharedPreferences? = null
-
+    private lateinit var viewList: ArrayList<CheckBox>
+    private var dateBegin = ""
+    private var dateEnd = ""
+    private var searchTerm = ""
+    private var pref: SharedPreferences? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,8 +36,7 @@ class SearchFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.search, container, false)
-        return view
+        return inflater.inflate(R.layout.search, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -68,8 +65,8 @@ class SearchFragment : BaseFragment() {
             world
         )
         // load SharedPreferences to decide state of CheckBoxes and Query
-        loadSaved();
-        buttonSearch();
+        loadSaved()
+        buttonSearch()
     }
 
     private fun buttonSearch() {
@@ -114,14 +111,14 @@ class SearchFragment : BaseFragment() {
         val today = Date()
         sdf.isLenient = false
         // set timeBegin and timeEnd to number of days before today, initialize as 0
-        var timeBegin = 0
-        var timeEnd = 0
+        var timeBegin: Int
+        var timeEnd: Int
         // if dateBegin is valid date, clamp to between today and 365 days ago
         // if dateBegin is not valid date, set to 365 days ago
         try {
             timeBegin = ((today.time - sdf.parse(dateBegin).time) / 86400000).toInt()
-            timeBegin = Math.min(365, timeBegin)
-            timeBegin = Math.max(0, timeBegin)
+            timeBegin = min(365, timeBegin)
+            timeBegin = max(0, timeBegin)
         } catch (e: ParseException) {
             timeBegin = 365
         }
@@ -129,16 +126,16 @@ class SearchFragment : BaseFragment() {
         // if dateEnd is not valid date, set to today
         try {
             timeEnd = ((today.time - sdf.parse(dateEnd).time) / 86400000).toInt()
-            timeEnd = Math.min(365, timeEnd)
-            timeEnd = Math.max(0, timeEnd)
+            timeEnd = min(365, timeEnd)
+            timeEnd = max(0, timeEnd)
         } catch (e: ParseException) {
             timeEnd = 0
         }
         // set dateBegin and dateEnd to today minus timeBegin and timeEnd
         // swap them if dateBegin is after dateEnd
-        dateBegin = sdf.format(Date(today.time - Math.max(timeBegin, timeEnd).toLong() * 86400000)) +
+        dateBegin = sdf.format(Date(today.time - max(timeBegin, timeEnd).toLong() * 86400000)) +
                 "T00:00:00Z"
-        dateEnd = sdf.format(Date(today.time - Math.min(timeBegin, timeEnd).toLong() * 86400000)) + "T23:59:59Z"
+        dateEnd = sdf.format(Date(today.time - min(timeBegin, timeEnd).toLong() * 86400000)) + "T23:59:59Z"
     }
 
     private fun getCategories(): String {

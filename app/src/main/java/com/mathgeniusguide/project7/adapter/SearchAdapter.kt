@@ -9,15 +9,13 @@ import android.webkit.WebView
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.mathgeniusguide.project7.MainActivity
 import com.mathgeniusguide.project7.R
 import com.mathgeniusguide.project7.connectivity.convertDate
 import com.mathgeniusguide.project7.responses.search.SearchResult
 import kotlinx.android.synthetic.main.news_item.view.*
-import java.text.SimpleDateFormat
 import java.util.*
 
-class SearchAdapter (private val items: ArrayList<SearchResult>, val context: Context, val rv: RecyclerView, val wv: WebView, val back: ImageView) : RecyclerView.Adapter<SearchAdapter.ViewHolder> () {
+class SearchAdapter (private val items: ArrayList<SearchResult>, val context: Context, private val rv: RecyclerView, private val wv: WebView, private val back: ImageView) : RecyclerView.Adapter<SearchAdapter.ViewHolder> () {
     override fun getItemCount(): Int {
         return items.size
     }
@@ -36,9 +34,10 @@ class SearchAdapter (private val items: ArrayList<SearchResult>, val context: Co
         // set date to fetched date, converted to "MMMM d, yyyy" format
         holder.displayDate.text = pos.pub_date.convertDate()
         // set category to fetched section and subsection
-        holder.displayCategory.text = "${pos.section_name}${if (pos.subsection_name != null && pos.subsection_name.isNotBlank()) "> ${pos.subsection_name}" else ""}"
+        val stringResource = if (pos.subsection_name != null && pos.subsection_name.isNotBlank()) R.string.section_and_subsection else R.string.section_only
+        holder.displayCategory.text = String.format(context.resources.getString(stringResource), pos.section_name, pos.subsection_name)
         // load fetched image into ImageView using Glide
-        if (pos.multimedia.size != 0) {
+        if (pos.multimedia.isNotEmpty()) {
             Glide.with(context).load("https://nytimes.com/${pos.multimedia[0].url}").into(holder.displayImage)
         }
         holder.parent.setOnClickListener {

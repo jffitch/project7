@@ -1,13 +1,13 @@
 package com.mathgeniusguide.project7.notifications
 
 import android.app.PendingIntent
-import android.app.job.JobParameters;
-import android.app.job.JobService;
+import android.app.job.JobParameters
+import android.app.job.JobService
 import android.content.Intent
 import android.util.Log
 import androidx.core.app.NotificationCompat
 
-import androidx.core.app.NotificationManagerCompat;
+import androidx.core.app.NotificationManagerCompat
 import com.mathgeniusguide.project7.MainActivity
 import com.mathgeniusguide.project7.R
 import com.mathgeniusguide.project7.api.Api
@@ -23,23 +23,21 @@ import java.util.*
 /** Job service to show notifications once a day **/
 class NotificationJobService : JobService() {
     private lateinit var notificationManagerCompat: NotificationManagerCompat
-    private var newsCount = 0
     private var searchTerm = ""
     private var categories = ""
     private var dateBegin = ""
     private var dateEnd = ""
-    private var notificationSent = false
 
     override fun onStartJob(params: JobParameters): Boolean {
         // get SearchFragment Term and Categories from bundle
-        searchTerm = params.extras.getString("searchTerm")
-        categories = params.extras.getString("categories")
+        searchTerm = params.extras.getString("searchTerm") ?: ""
+        categories = params.extras.getString("categories") ?: ""
         // set date range to between yesterday at 0:00:00 and today at 23:59:59
         val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val today = Date()
         dateBegin = sdf.format(today) + "T00:00:00Z"
         dateEnd = sdf.format(Date(today.time + 86400000)) + "T23:59:59Z"
-        notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext())
+        notificationManagerCompat = NotificationManagerCompat.from(applicationContext)
 
         searchForNews()
         return true

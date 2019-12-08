@@ -19,19 +19,18 @@ import java.util.*
 
 class SearchViewFragment : BaseFragment() {
 
-    val viewModel by lazy { ViewModelProviders.of(activity!!).get(NewsViewModel::class.java) }
-    val searchNewsList = ArrayList<SearchResult>()
-    var dateBegin = ""
-    var dateEnd = ""
-    var searchTerm = ""
+    private val viewModel by lazy { ViewModelProviders.of(activity!!).get(NewsViewModel::class.java) }
+    private val searchNewsList = ArrayList<SearchResult>()
+    private var dateBegin = ""
+    private var dateEnd = ""
+    private var searchTerm = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.searchview, container, false)
-        return view
+        return inflater.inflate(R.layout.searchview, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

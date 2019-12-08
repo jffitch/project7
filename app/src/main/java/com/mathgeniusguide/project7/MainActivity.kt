@@ -12,8 +12,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private val TAG by lazy { MainActivity::class.java.simpleName }
-
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var navController: NavController
 

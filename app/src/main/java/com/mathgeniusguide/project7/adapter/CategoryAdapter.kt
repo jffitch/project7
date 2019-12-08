@@ -9,16 +9,14 @@ import android.webkit.WebView
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.mathgeniusguide.project7.MainActivity
 import com.mathgeniusguide.project7.responses.category.CategoryResult
 import com.mathgeniusguide.project7.R
 import com.mathgeniusguide.project7.connectivity.convertDate
 import kotlinx.android.synthetic.main.news_item.view.*
-import java.text.SimpleDateFormat
 import java.util.*
 
 // include views as arguments so their visibility can be changed in the onClick functions
-class CategoryAdapter (private val items: ArrayList<CategoryResult>, val context: Context, val rv: RecyclerView, val wv: WebView, val back: ImageView) : RecyclerView.Adapter<CategoryAdapter.ViewHolder> () {
+class CategoryAdapter (private val items: ArrayList<CategoryResult>, val context: Context, private val rv: RecyclerView, private val wv: WebView, private val back: ImageView) : RecyclerView.Adapter<CategoryAdapter.ViewHolder> () {
     override fun getItemCount(): Int {
         return items.size
     }
@@ -37,9 +35,10 @@ class CategoryAdapter (private val items: ArrayList<CategoryResult>, val context
         // set date to fetched date, converted to "MMMM d, yyyy" format
         holder.displayDate.text = pos.created_date.convertDate()
         // set category to fetched section and subsection
-        holder.displayCategory.text = "${pos.section}${if (pos.subsection != null && pos.subsection.isNotBlank()) "> ${pos.subsection}" else ""}"
+        val stringResource = if (pos.subsection != null && pos.subsection.isNotBlank()) R.string.section_and_subsection else R.string.section_only
+        holder.displayCategory.text = String.format(context.resources.getString(stringResource), pos.section, pos.subsection)
         // load fetched image into ImageView using Glide
-        if (pos.multimedia.size != 0) {
+        if (pos.multimedia.isNotEmpty()) {
             Glide.with(context).load(pos.multimedia[0].url).into(holder.displayImage)
         }
         holder.parent.setOnClickListener {

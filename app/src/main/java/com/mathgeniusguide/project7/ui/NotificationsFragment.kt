@@ -22,18 +22,16 @@ import java.util.*
 
 class NotificationsFragment : BaseFragment() {
 
-    lateinit var viewList: ArrayList<CheckBox>
-    var searchTerm = ""
-    var newsCount = 0
-    var pref: SharedPreferences? = null
+    private lateinit var viewList: ArrayList<CheckBox>
+    private var searchTerm = ""
+    private var pref: SharedPreferences? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.notification, container, false)
-        return view
+        return inflater.inflate(R.layout.notification, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -63,14 +61,9 @@ class NotificationsFragment : BaseFragment() {
             world
         )
         // load SharedPreferences to decide state of CheckBoxes and Query
-        loadSaved();
+        loadSaved()
         // set button to activate Notification function when clicked
         buttonNotification()
-
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
     }
 
     // load SharedPreferences to decide state of CheckBoxes and Query
@@ -112,20 +105,20 @@ class NotificationsFragment : BaseFragment() {
 
     // set up notification Job Service
     private fun notificationSetup() {
-        val scheduler = context!!.getApplicationContext().getSystemService(JOB_SCHEDULER_SERVICE) as JobScheduler
-        val componentName = ComponentName(context!!.getApplicationContext(), NotificationJobService::class.java)
+        val scheduler = context!!.applicationContext.getSystemService(JOB_SCHEDULER_SERVICE) as JobScheduler
+        val componentName = ComponentName(context!!.applicationContext, NotificationJobService::class.java)
 
         // activate Job Service if Notification Switch is checked, cancel if not checked
         if (notificationSwitch.isChecked) {
             // get SearchFragment Term and categories, and save them to a bundle for the Job Service
             searchTerm = notificationQuery.text.toString()
             val categories = getCategories()
-            val bundle = PersistableBundle();
-            bundle.putString("searchTerm", searchTerm);
-            bundle.putString("categories", categories);
+            val bundle = PersistableBundle()
+            bundle.putString("searchTerm", searchTerm)
+            bundle.putString("categories", categories)
 
-            val jobInfo = JobInfo.Builder(0, componentName).setPeriodic(86400 * 1000).setExtras(bundle).build();
-            scheduler.schedule(jobInfo);
+            val jobInfo = JobInfo.Builder(0, componentName).setPeriodic(86400 * 1000).setExtras(bundle).build()
+            scheduler.schedule(jobInfo)
         } else {
             scheduler.cancelAll()
         }

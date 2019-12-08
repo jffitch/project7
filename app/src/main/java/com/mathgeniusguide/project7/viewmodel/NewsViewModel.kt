@@ -15,8 +15,6 @@ import kotlinx.coroutines.launch
 
 class NewsViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val TAG by lazy { NewsViewModel::class.java.simpleName }
-
     // declare MutableLiveData variables for use in this class
     // private as MutableLiveData should not be accessible from outside
     private val _topNews: MutableLiveData<CategoryResponse?>? = MutableLiveData()

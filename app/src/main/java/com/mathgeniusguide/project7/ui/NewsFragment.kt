@@ -20,11 +20,10 @@ import kotlinx.android.synthetic.main.news.*
 
 class NewsFragment: BaseFragment() {
 
-    val viewModel by lazy { ViewModelProviders.of(activity!!).get(NewsViewModel::class.java)}
-
-    val categoryNewsList = ArrayList<CategoryResult>()
-    val popularNewsList = ArrayList<PopularResult>()
-    var position: Int = 0
+    private val viewModel by lazy { ViewModelProviders.of(activity!!).get(NewsViewModel::class.java)}
+    private val categoryNewsList = ArrayList<CategoryResult>()
+    private val popularNewsList = ArrayList<PopularResult>()
+    private var position: Int = 0
     private var newsBackArrowPressed = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,8 +39,7 @@ class NewsFragment: BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.news, container, false)
-        return view
+        return inflater.inflate(R.layout.news, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -92,7 +90,7 @@ class NewsFragment: BaseFragment() {
                         // Recycler View
                         // add each line from search to array list, then set up layout manager and adapter
                         categoryNewsList.addAll(it.results)
-                        categoryNewsList.sortByDescending { it.created_date }
+                        categoryNewsList.sortByDescending { v -> v.created_date }
                         newsRV.layoutManager = LinearLayoutManager(context)
                         newsRV.adapter = CategoryAdapter(categoryNewsList, context!!, newsRV, newsWebView, newsBackArrow)
                     }
@@ -106,7 +104,7 @@ class NewsFragment: BaseFragment() {
                         // Recycler View
                         // add each line from search to array list, then set up layout manager and adapter
                         popularNewsList.addAll(it.results)
-                        popularNewsList.sortByDescending { it.published_date }
+                        popularNewsList.sortByDescending { v -> v.published_date }
                         newsRV.layoutManager = LinearLayoutManager(context)
                         newsRV.adapter = PopularAdapter(popularNewsList, context!!, newsRV, newsWebView, newsBackArrow)
                     }
@@ -120,7 +118,7 @@ class NewsFragment: BaseFragment() {
                         // Recycler View
                         // add each line from search to array list, then set up layout manager and adapter
                         categoryNewsList.addAll(it.results)
-                        categoryNewsList.sortByDescending { it.created_date }
+                        categoryNewsList.sortByDescending { v -> v.created_date }
                         newsRV.layoutManager = LinearLayoutManager(context)
                         newsRV.adapter = CategoryAdapter(categoryNewsList, context!!, newsRV, newsWebView, newsBackArrow)
                     }
