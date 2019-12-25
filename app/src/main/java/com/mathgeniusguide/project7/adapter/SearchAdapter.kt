@@ -2,20 +2,21 @@ package com.mathgeniusguide.project7.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.WebView
-import android.widget.ImageView
+import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.mathgeniusguide.project7.R
 import com.mathgeniusguide.project7.connectivity.convertDate
 import com.mathgeniusguide.project7.responses.search.SearchResult
+import com.mathgeniusguide.project7.util.Constants
 import kotlinx.android.synthetic.main.news_item.view.*
 import java.util.*
 
-class SearchAdapter (private val items: ArrayList<SearchResult>, val context: Context, private val rv: RecyclerView, private val wv: WebView, private val back: ImageView) : RecyclerView.Adapter<SearchAdapter.ViewHolder> () {
+class SearchAdapter (private val items: ArrayList<SearchResult>, val context: Context, val navController: NavController) : RecyclerView.Adapter<SearchAdapter.ViewHolder> () {
     override fun getItemCount(): Int {
         return items.size
     }
@@ -41,13 +42,10 @@ class SearchAdapter (private val items: ArrayList<SearchResult>, val context: Co
             Glide.with(context).load("https://nytimes.com/${pos.multimedia[0].url}").into(holder.displayImage)
         }
         holder.parent.setOnClickListener {
-            // load fetched url into WebView
-            wv.loadUrl(pos.web_url)
-            wv.settings.javaScriptEnabled = true
-            // WebView becomes visible to view webpage
-            wv.visibility = View.VISIBLE
-            back.visibility = View.VISIBLE
-            rv.visibility = View.GONE
+            val bundle = Bundle()
+            bundle.putString("url", pos.web_url)
+            bundle.putInt("previous", Constants.SEARCH_NEWS)
+            navController.navigate(R.id.action_to_webpage, bundle)
         }
     }
 

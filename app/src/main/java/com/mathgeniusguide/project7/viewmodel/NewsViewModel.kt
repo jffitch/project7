@@ -38,7 +38,7 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
     val isDataLoadingError: LiveData<Boolean>
         get() = _isDataLoadingError
 
-    // fetch news
+    // fetch news_fragment
     fun fetchTopNews() {
         val connectivityInterceptor = ConnectivityInterceptor(getApplication())
         _dataLoading.value = true
@@ -86,6 +86,7 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
 
     fun fetchSearchNews(query: String, categories: String, beginDate: String, endDate: String) {
         val connectivityInterceptor = ConnectivityInterceptor(getApplication())
+        _dataLoading.value = true
         viewModelScope.launch {
             try {
                 _searchNews?.postValue(
@@ -96,9 +97,11 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
                         endDate
                     ).body()
                 )
+                _dataLoading.postValue(false)
                 _isDataLoadingError.postValue(false)
 
             } catch (e: NoConnectivityException) {
+                _dataLoading.postValue(false)
                 _isDataLoadingError.postValue(true)
             }
         }

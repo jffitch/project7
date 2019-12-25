@@ -6,12 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.mathgeniusguide.project7.MainActivity
 import com.mathgeniusguide.project7.R
 import com.mathgeniusguide.project7.base.BaseFragment
-import kotlinx.android.synthetic.main.checklist.*
-import kotlinx.android.synthetic.main.search.*
+import kotlinx.android.synthetic.main.checklist_include.*
+import kotlinx.android.synthetic.main.search_fragment.*
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -20,9 +21,9 @@ import kotlin.math.min
 
 class SearchFragment : BaseFragment() {
 
-    private lateinit var viewList: ArrayList<CheckBox>
-    private var dateBegin = ""
-    private var dateEnd = ""
+    lateinit var viewList: ArrayList<CheckBox>
+    var dateBegin = ""
+    var dateEnd = ""
     private var searchTerm = ""
     private var pref: SharedPreferences? = null
 
@@ -36,7 +37,7 @@ class SearchFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.search, container, false)
+        return inflater.inflate(R.layout.search_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -84,7 +85,8 @@ class SearchFragment : BaseFragment() {
             dateBegin = beginDate.text.toString()
             dateEnd = endDate.text.toString()
             // make sure user inputted dates are valid and are between one year ago and today
-            fixDates()
+            // now's date is passed as a parameter so unit tests work
+            fixDates(Date())
 
             val bundle = Bundle()
             bundle.putString("searchTerm", searchTerm)
@@ -106,9 +108,8 @@ class SearchFragment : BaseFragment() {
     }
 
     // make sure user inputted dates are valid and are between one year ago and today
-    private fun fixDates() {
+    fun fixDates(today: Date) {
         val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val today = Date()
         sdf.isLenient = false
         // set timeBegin and timeEnd to number of days before today, initialize as 0
         var timeBegin: Int

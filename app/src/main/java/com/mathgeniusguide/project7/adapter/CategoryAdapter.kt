@@ -1,22 +1,21 @@
 package com.mathgeniusguide.project7.adapter
 
-import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.WebView
-import android.widget.ImageView
+import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.mathgeniusguide.project7.responses.category.CategoryResult
 import com.mathgeniusguide.project7.R
 import com.mathgeniusguide.project7.connectivity.convertDate
+import com.mathgeniusguide.project7.responses.category.CategoryResult
 import kotlinx.android.synthetic.main.news_item.view.*
 import java.util.*
 
 // include views as arguments so their visibility can be changed in the onClick functions
-class CategoryAdapter (private val items: ArrayList<CategoryResult>, val context: Context, private val rv: RecyclerView, private val wv: WebView, private val back: ImageView) : RecyclerView.Adapter<CategoryAdapter.ViewHolder> () {
+class CategoryAdapter (private val items: ArrayList<CategoryResult>, val context: Context, private val navController: NavController, private val tabPosition: Int) : RecyclerView.Adapter<CategoryAdapter.ViewHolder> () {
     override fun getItemCount(): Int {
         return items.size
     }
@@ -26,7 +25,6 @@ class CategoryAdapter (private val items: ArrayList<CategoryResult>, val context
         return ViewHolder(LayoutInflater.from(context).inflate(R.layout.news_item, parent, false))
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // code here controls what's done to the views for each group
         val pos = items[position]
@@ -42,13 +40,10 @@ class CategoryAdapter (private val items: ArrayList<CategoryResult>, val context
             Glide.with(context).load(pos.multimedia[0].url).into(holder.displayImage)
         }
         holder.parent.setOnClickListener {
-            // load fetched url into WebView
-            wv.loadUrl(pos.url)
-            wv.settings.javaScriptEnabled = true
-            // WebView becomes visible to view webpage
-            wv.visibility = View.VISIBLE
-            rv.visibility = View.GONE
-            back.visibility = View.VISIBLE
+            val bundle = Bundle()
+            bundle.putString("url", pos.url)
+            bundle.putInt("previous", tabPosition)
+            navController.navigate(R.id.action_to_webpage, bundle)
         }
     }
 

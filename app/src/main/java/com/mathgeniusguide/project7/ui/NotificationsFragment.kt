@@ -16,8 +16,8 @@ import com.mathgeniusguide.project7.MainActivity
 import com.mathgeniusguide.project7.R
 import com.mathgeniusguide.project7.base.BaseFragment
 import com.mathgeniusguide.project7.notifications.NotificationJobService
-import kotlinx.android.synthetic.main.checklist.*
-import kotlinx.android.synthetic.main.notification.*
+import kotlinx.android.synthetic.main.checklist_include.*
+import kotlinx.android.synthetic.main.notification_fragment.*
 import java.util.*
 
 class NotificationsFragment : BaseFragment() {
@@ -31,7 +31,7 @@ class NotificationsFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.notification, container, false)
+        return inflater.inflate(R.layout.notification_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -87,7 +87,7 @@ class NotificationsFragment : BaseFragment() {
             editor?.putString("notificationQuery", notificationQuery.text.toString())
             editor?.apply()
 
-            // set up notification Job Service
+            // set up notification_fragment Job Service
             notificationSetup()
         }
     }
@@ -103,7 +103,7 @@ class NotificationsFragment : BaseFragment() {
         return string
     }
 
-    // set up notification Job Service
+    // set up notification_fragment Job Service
     private fun notificationSetup() {
         val scheduler = context!!.applicationContext.getSystemService(JOB_SCHEDULER_SERVICE) as JobScheduler
         val componentName = ComponentName(context!!.applicationContext, NotificationJobService::class.java)

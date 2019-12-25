@@ -7,4 +7,5 @@ object Constants {
     const val TOP_NEWS = 0
     const val POPULAR_NEWS = 1
     const val POLITICS_NEWS = 2
+    const val SEARCH_NEWS = 3
 }
