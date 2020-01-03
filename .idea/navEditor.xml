@@ -116,7 +116,7 @@
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_search_result_to_topNews">
+                            <entry key="action_search_result_to_search">
                               <value>
                                 <LayoutPositions />
                               </value>
