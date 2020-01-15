@@ -1,6 +1,5 @@
 package com.mathgeniusguide.project7.connectivity
 
-import org.junit.Assert.*
 import org.junit.Test
 
 class NoConnectivityExceptionTest {

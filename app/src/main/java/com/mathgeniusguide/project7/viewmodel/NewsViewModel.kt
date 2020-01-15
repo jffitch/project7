@@ -24,7 +24,9 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
     private val _dataLoading = MutableLiveData<Boolean>()
     private val _isDataLoadingError = MutableLiveData<Boolean>()
     // for testing purposes
-    val testNews: MutableLiveData<CategoryResponse?>? = MutableLiveData()
+    val testCategory: MutableLiveData<CategoryResponse?>? = MutableLiveData()
+    val testPopular: MutableLiveData<PopularResponse?>? = MutableLiveData()
+    val testSearch: MutableLiveData<SearchResponseFull?>? = MutableLiveData()
 
     // declare LiveData variables for observing in other classes
     val topNews: LiveData<CategoryResponse?>?
@@ -42,10 +44,12 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
 
     // fetch news_fragment
     fun fetchTopNews() {
+        // check internet connection
         val connectivityInterceptor = ConnectivityInterceptor(getApplication())
         _dataLoading.value = true
         viewModelScope.launch {
             try {
+                // API call
                 _topNews?.postValue(Api.invoke(connectivityInterceptor).getTopStories().body())
                 _dataLoading.postValue(false)
                 _isDataLoadingError.postValue(false)
@@ -57,10 +61,12 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun fetchPopularNews() {
+        // check internet connection
         val connectivityInterceptor = ConnectivityInterceptor(getApplication())
         _dataLoading.value = true
         viewModelScope.launch {
             try {
+                // API call
                 _popularNews?.postValue(Api.invoke(connectivityInterceptor).getPopularNews().body())
                 _dataLoading.postValue(false)
                 _isDataLoadingError.postValue(false)
@@ -72,10 +78,12 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun fetchPoliticsNews() {
+        // check internet connection
         val connectivityInterceptor = ConnectivityInterceptor(getApplication())
         _dataLoading.value = true
         viewModelScope.launch {
             try {
+                // API call
                 _politicsNews?.postValue(Api.invoke(connectivityInterceptor).getPoliticsNews().body())
                 _dataLoading.postValue(false)
                 _isDataLoadingError.postValue(false)
@@ -87,10 +95,12 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun fetchSearchNews(query: String, categories: String, beginDate: String, endDate: String) {
+        // check internet connection
         val connectivityInterceptor = ConnectivityInterceptor(getApplication())
         _dataLoading.value = true
         viewModelScope.launch {
             try {
+                // API call
                 _searchNews?.postValue(
                     Api.invoke(connectivityInterceptor).getSearchNews(
                         query,
@@ -105,21 +115,6 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
             } catch (e: NoConnectivityException) {
                 _dataLoading.postValue(false)
                 _isDataLoadingError.postValue(true)
-            }
-        }
-    }
-
-    fun fetchTestNews() {
-        val connectivityInterceptor = ConnectivityInterceptor(getApplication())
-        _dataLoading.value = true
-        viewModelScope.launch {
-            try {
-                testNews?.postValue(Api.invoke(connectivityInterceptor).getTopStories().body())
-                _dataLoading.postValue(false)
-                _isDataLoadingError.postValue(false)
-            } catch (e: NoConnectivityException) {
-                _isDataLoadingError.postValue(true)
-                _dataLoading.postValue(false)
             }
         }
     }

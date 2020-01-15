@@ -23,6 +23,7 @@ import java.util.*
 /** Job service to show notifications once a day **/
 class NotificationJobService : JobService() {
     private lateinit var notificationManagerCompat: NotificationManagerCompat
+    // initialize notification variables
     private var searchTerm = ""
     private var categories = ""
     private var dateBegin = ""
@@ -51,20 +52,23 @@ class NotificationJobService : JobService() {
         val connectivityInterceptor = ConnectivityInterceptor(applicationContext)
 
         try {
+            // fetch from API using searchTerm, categories, dateBegin, dateEnd to get number of news items
             val searchNewsNotSuspended =
                 Api.invoke(connectivityInterceptor)
                     .getSearchNewsNotSuspended(searchTerm, categories, dateBegin, dateEnd)
-
             searchNewsNotSuspended.enqueue(object : Callback<SearchResponseFull> {
                 override fun onResponse(
                     call: Call<SearchResponseFull>,
                     response: Response<SearchResponseFull>
                 ) {
                     if (response.isSuccessful) {
+                        // if there are news items, send notification
                         val newsCount = response.body()?.response?.docs?.size ?: 0
                         if (newsCount > 0) {
+                            // send news count to display in notification, and API call variables to run API call again when notification is clicked
                             sendNotification(newsCount, searchTerm, categories, dateBegin, dateEnd)
                             val list = response.body()?.response?.docs
+                            // show news items in log to confirm that news is loaded correctly
                             for (item in list!!) {
                                 Log.d("NotificationJobService", item.headline.main)
                             }
@@ -90,6 +94,7 @@ class NotificationJobService : JobService() {
         dateEnd: String
     ) {
         val notificationManager = NotificationManagerCompat.from(applicationContext)
+        // create intent, bundle with variables, notification title, and notification message
         val intent = Intent(applicationContext, MainActivity::class.java)
         intent.putExtra("searchTerm", searchTerm)
         intent.putExtra("categories", categories)
@@ -99,6 +104,7 @@ class NotificationJobService : JobService() {
         val title = resources.getString(R.string.notification_title)
         val message = String.format(resources.getString(R.string.notification_message), newsCount, categories, searchTerm)
 
+        // create and send notification
         val notification = NotificationCompat.Builder(applicationContext, "notificationChannel")
             .setSmallIcon(R.drawable.image_placeholder)
             .setContentTitle(title)

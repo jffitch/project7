@@ -20,11 +20,13 @@ import com.mathgeniusguide.project7.viewmodel.NewsViewModel
 import kotlinx.android.synthetic.main.news_fragment.*
 
 class NewsFragment: BaseFragment() {
-
+    // initialize viewModel
     private val viewModel by lazy { ViewModelProviders.of(activity!!).get(NewsViewModel::class.java)}
+    // initialize news lists
     private val categoryNewsList = ArrayList<CategoryResult>()
     private val popularNewsList = ArrayList<PopularResult>()
     private val politicsNewsList = ArrayList<CategoryResult>()
+    // initialize tab position, will be set in navigation functions
     private var position: Int = 0
     private var newsBackArrowPressed = false
 
@@ -51,10 +53,12 @@ class NewsFragment: BaseFragment() {
         // fetch news_fragment based on which tab is selected
         fetch(position)
 
+        // show progress bar if data is currrently being loaded
         viewModel.dataLoading.observe(viewLifecycleOwner, Observer {
             progressBar.visibility = if(it) View.VISIBLE else View.GONE
         })
 
+        // show error screen if error loading data
         viewModel.isDataLoadingError.observe(viewLifecycleOwner, Observer {error ->
             if(!error) {
                 noNewsLayout.visibility = View.GONE
@@ -80,7 +84,7 @@ class NewsFragment: BaseFragment() {
                 viewModel.topNews?.observe(viewLifecycleOwner, Observer {
                     if(it != null) {
                         // Recycler View
-                        // add each line from search_fragment to array list, then set up layout manager and adapter
+                        // add each result to array list, then set up layout manager and adapter
                         categoryNewsList.clear()
                         categoryNewsList.addAll(it.results)
                         categoryNewsList.sortByDescending { v -> v.created_date }
@@ -95,7 +99,7 @@ class NewsFragment: BaseFragment() {
                 viewModel.popularNews?.observe(viewLifecycleOwner, Observer {
                     if(it != null) {
                         // Recycler View
-                        // add each line from search_fragment to array list, then set up layout manager and adapter
+                        // add each result to array list, then set up layout manager and adapter
                         popularNewsList.clear()
                         popularNewsList.addAll(it.results)
                         popularNewsList.sortByDescending { v -> v.published_date }
@@ -110,7 +114,7 @@ class NewsFragment: BaseFragment() {
                 viewModel.politicsNews?.observe(viewLifecycleOwner, Observer {
                     if(it != null) {
                         // Recycler View
-                        // add each line from search_fragment to array list, then set up layout manager and adapter
+                        // add each result to array list, then set up layout manager and adapter
                         politicsNewsList.clear()
                         politicsNewsList.addAll(it.results)
                         politicsNewsList.sortByDescending { v -> v.created_date }

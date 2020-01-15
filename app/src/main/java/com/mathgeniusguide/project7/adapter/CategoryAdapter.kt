@@ -36,12 +36,14 @@ class CategoryAdapter (private val items: ArrayList<CategoryResult>, val context
         val stringResource = if (pos.subsection != null && pos.subsection.isNotBlank()) R.string.section_and_subsection else R.string.section_only
         holder.displayCategory.text = String.format(context.resources.getString(stringResource), pos.section, pos.subsection)
         // load fetched image into ImageView using Glide
-        if (pos.multimedia.isNotEmpty()) {
+        if (pos.multimedia != null && pos.multimedia.isNotEmpty()) {
             Glide.with(context).load(pos.multimedia[0].url).into(holder.displayImage)
         }
+        // open webpage on click
         holder.parent.setOnClickListener {
             val bundle = Bundle()
             bundle.putString("url", pos.url)
+            // save current fragment in bundle for when back arrow is pressed
             bundle.putInt("previous", tabPosition)
             navController.navigate(R.id.action_to_webpage, bundle)
         }

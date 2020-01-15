@@ -15,6 +15,7 @@ class SplashFragment : Fragment() {
 
     private val TAG by lazy { SplashFragment::class.java.simpleName }
 
+    // initialize date, search term, and categories variables, which will later be gotten from bundle
     private var searchTerm = ""
     private var categories = ""
     private var dateBegin = ""
@@ -27,9 +28,8 @@ class SplashFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
         setFragmentAsFullScreen()
-
+        // get variables from bundle
         val bundle = activity?.intent?.extras
         if (bundle != null) {
             searchTerm = bundle.getString("searchTerm", "")
@@ -37,7 +37,8 @@ class SplashFragment : Fragment() {
             dateBegin = bundle.getString("dateBegin", "")
             dateEnd = bundle.getString("dateEnd", "")
         }
-
+        // decide which fragment to load based on whether loaded from notification
+        // if searchTerm is not blank, it was loaded from notification
         navigateAfterDelay(searchTerm != "")
     }
 
@@ -55,6 +56,7 @@ class SplashFragment : Fragment() {
 
     private fun moveToAppropriateFragment(loaded: Boolean) {
         try {
+            // if loaded from notification, go to Search Result fragment
             if (loaded) {
                 val bundle = Bundle()
                 bundle.putString("searchTerm", searchTerm)
@@ -63,6 +65,7 @@ class SplashFragment : Fragment() {
                 bundle.putString("dateEnd", dateEnd)
                 findNavController().navigate(R.id.load_notification, bundle)
             } else {
+                // if not loaded from notification, go to Top News fragment
                 findNavController().navigate(R.id.load_normal)
             }
         } catch (e: IllegalStateException) {

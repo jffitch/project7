@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
@@ -20,11 +19,15 @@ import java.util.*
 
 class SearchResultFragment : BaseFragment() {
 
+    // initialzie viewModel
     private val viewModel by lazy { ViewModelProviders.of(activity!!).get(NewsViewModel::class.java) }
+    // initialize news list
     private val searchNewsList = ArrayList<SearchResult>()
+    // initialize date, search term, and categories variables, which will later be gotten from bundle
     private var dateBegin = ""
     private var dateEnd = ""
     private var searchTerm = ""
+    private var categories = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,21 +51,23 @@ class SearchResultFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        // load variables from bundle
         arguments?.let {
             searchTerm = it.getString("searchTerm", "")
-            val categories = it.getString("categories", "")
+            categories = it.getString("categories", "")
             dateBegin = it.getString("dateBegin", "")
             dateEnd = it.getString("dateEnd", "")
-            observeViewModel()
-            viewModel.fetchSearchNews(searchTerm, categories, dateBegin, dateEnd)
         }
+        // observe viewModel and fetch news
+        observeViewModel()
+        viewModel.fetchSearchNews(searchTerm, categories, dateBegin, dateEnd)
     }
 
     private fun observeViewModel() {
         viewModel.searchNews?.observe(viewLifecycleOwner, Observer { searchResponse ->
             if (searchResponse != null) {
                 // Recycler View
-                // add each line from database to array list, then set up layout manager and adapter
+                // add each result to array list, then set up layout manager and adapter
                 searchNewsList.clear()
                 searchNewsList.addAll(searchResponse.response.docs)
                 searchNewsList.sortByDescending { it.pub_date }
@@ -71,10 +76,13 @@ class SearchResultFragment : BaseFragment() {
                         SearchAdapter(searchNewsList, context!!, findNavController())
             }
         })
+
+        // show progress bar if data is currrently being loaded
         viewModel.dataLoading.observe(viewLifecycleOwner, Observer {
             progressBar.visibility = if(it) View.VISIBLE else View.GONE
         })
 
+        // show error screen if error loading data
         viewModel.isDataLoadingError.observe(viewLifecycleOwner, Observer {error ->
             if(!error) {
                 noNewsLayout.visibility = View.GONE

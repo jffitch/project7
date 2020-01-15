@@ -22,8 +22,11 @@ import java.util.*
 
 class NotificationsFragment : BaseFragment() {
 
+    // initialize empty list, which will later contain list of all checkboxes
     private lateinit var viewList: ArrayList<CheckBox>
+    // initialize searchTerm, which will later be gotten from EditText
     private var searchTerm = ""
+    // initialize Shared Preferences
     private var pref: SharedPreferences? = null
 
     override fun onCreateView(
@@ -69,10 +72,13 @@ class NotificationsFragment : BaseFragment() {
     // load SharedPreferences to decide state of CheckBoxes and Query
     private fun loadSaved() {
         pref = context?.getSharedPreferences("com.mathgeniusguide.project7.pref", 0)
+        // load checkbox states
         for (i in viewList) {
             i.isChecked = pref?.getBoolean(resources.getResourceEntryName(i.id) + "_notification", false) ?: false
         }
+        // load switch state
         notificationSwitch.isChecked = pref?.getBoolean("switch", false) ?: false
+        // load query text
         notificationQuery.setText(pref?.getString("notificationQuery", "") ?: "")
     }
 
@@ -110,7 +116,7 @@ class NotificationsFragment : BaseFragment() {
 
         // activate Job Service if Notification Switch is checked, cancel if not checked
         if (notificationSwitch.isChecked) {
-            // get SearchFragment Term and categories, and save them to a bundle for the Job Service
+            // get search term and categories, and save them to a bundle for the Job Service
             searchTerm = notificationQuery.text.toString()
             val categories = getCategories()
             val bundle = PersistableBundle()

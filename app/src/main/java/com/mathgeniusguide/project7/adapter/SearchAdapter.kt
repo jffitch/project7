@@ -38,12 +38,14 @@ class SearchAdapter (private val items: ArrayList<SearchResult>, val context: Co
         val stringResource = if (pos.subsection_name != null && pos.subsection_name.isNotBlank()) R.string.section_and_subsection else R.string.section_only
         holder.displayCategory.text = String.format(context.resources.getString(stringResource), pos.section_name, pos.subsection_name)
         // load fetched image into ImageView using Glide
-        if (pos.multimedia.isNotEmpty()) {
+        if (pos.multimedia != null && pos.multimedia.isNotEmpty()) {
             Glide.with(context).load("https://nytimes.com/${pos.multimedia[0].url}").into(holder.displayImage)
         }
+        // open webpage on click
         holder.parent.setOnClickListener {
             val bundle = Bundle()
             bundle.putString("url", pos.web_url)
+            // save current fragment in bundle for when back arrow is pressed
             bundle.putInt("previous", Constants.SEARCH_NEWS)
             navController.navigate(R.id.action_to_webpage, bundle)
         }

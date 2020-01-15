@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
-import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.mathgeniusguide.project7.MainActivity
 import com.mathgeniusguide.project7.R
@@ -21,10 +20,13 @@ import kotlin.math.min
 
 class SearchFragment : BaseFragment() {
 
+    // initialize empty list, which will later contain list of all checkboxes
     lateinit var viewList: ArrayList<CheckBox>
+    // initialize date and search term variables, which will later be gotten from EditText
     var dateBegin = ""
     var dateEnd = ""
     private var searchTerm = ""
+    // initialize Shared Preferences
     private var pref: SharedPreferences? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -101,9 +103,11 @@ class SearchFragment : BaseFragment() {
     // load SharedPreferences to decide state of CheckBoxes and Query
     private fun loadSaved() {
         pref = context?.getSharedPreferences("com.mathgeniusguide.project7.pref", 0)
+        // load checkbox states
         for (i in viewList) {
             i.isChecked = pref?.getBoolean(resources.getResourceEntryName(i.id) + "_search", false) ?: false
         }
+        // load query text
         searchQuery.setText(pref?.getString("searchQuery", "") ?: "")
     }
 

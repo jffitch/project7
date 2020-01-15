@@ -35,12 +35,14 @@ class PopularAdapter (private val items: ArrayList<PopularResult>, val context: 
         // set category to fetched section
         holder.displayCategory.text = pos.section
         // load fetched image into ImageView using Glide
-        if (pos.media.isNotEmpty() && pos.media[0].mediaMetadata.isNotEmpty()) {
+        if (pos.media != null && pos.media.isNotEmpty() && pos.media[0].mediaMetadata.isNotEmpty()) {
             Glide.with(context).load(pos.media[0].mediaMetadata[0].url).into(holder.displayImage)
         }
+        // open webpage on click
         holder.parent.setOnClickListener {
             val bundle = Bundle()
             bundle.putString("url", pos.url)
+            // save current fragment in bundle for when back arrow is pressed
             bundle.putInt("previous", Constants.POPULAR_NEWS)
             navController.navigate(R.id.action_to_webpage, bundle)
         }
