@@ -1,44 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/parentView"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:id="@+id/parentView">
+        android:layout_height="70dp">
 
     <ImageView
+            android:id="@+id/displayImage"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:src="@drawable/image_placeholder"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:id="@+id/displayImage"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text="Category > Subcategory"
-              app:layout_constraintStart_toEndOf="@id/displayImage"
-              app:layout_constraintTop_toTopOf="parent"
-              android:paddingLeft="5dp"
-              android:textStyle="bold"
-              android:id="@+id/displayCategory"/>
+    <TextView
+            android:id="@+id/displayCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="5dp"
+            android:text="Category > Subcategory"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/displayImage"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              app:layout_constraintTop_toTopOf="parent"
-              app:layout_constraintEnd_toEndOf="parent"
-              android:text="Date"
-              android:paddingRight="5dp"
-              android:textStyle="bold"
-              android:id="@+id/displayDate"/>
+    <TextView
+            android:id="@+id/displayDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="5dp"
+            android:text="Date"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              app:layout_constraintStart_toStartOf="parent"
-              app:layout_constraintEnd_toEndOf="parent"
-              app:layout_constraintTop_toBottomOf="@id/displayCategory"
-              android:paddingLeft="75dp"
-              android:paddingRight="5dp"
-              android:text="Title"
-              android:id="@+id/displayTitle"/>
+    <TextView
+            android:id="@+id/displayTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="75dp"
+            android:paddingRight="5dp"
+            android:text="Title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/displayCategory" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

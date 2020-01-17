@@ -72,8 +72,7 @@ class NewsViewModelTest {
         val list = TestUtility.getTestingCategoryListOfSize(5)
         liveData!!.value = CategoryResponse(list, "OK")
         testObserver.assertHasValue().assertHistorySize(1)
-        for(i in 0 until 4)
-        {
+        for (i in 0 until 4) {
             liveData.value = CategoryResponse(TestUtility.getTestingCategoryListOfSize(30), "OK")
         }
         testObserver.assertHasValue().assertHistorySize(5)
@@ -87,7 +86,8 @@ class NewsViewModelTest {
         testObserver.assertNoValue()
         testLifecycle.resume()
         for (i in 0 until 4) {
-            viewModel!!.testCategory!!.value = CategoryResponse(TestUtility.getTestingCategoryListOfSize(4), "OK")
+            viewModel!!.testCategory!!.value =
+                CategoryResponse(TestUtility.getTestingCategoryListOfSize(4), "OK")
         }
         val list = TestUtility.getTestingCategoryListOfSize(10)
         viewModel!!.testCategory!!.value = CategoryResponse(list, "OK")
@@ -114,8 +114,7 @@ class NewsViewModelTest {
         val list = TestUtility.getTestingPopularListOfSize(5)
         liveData!!.value = PopularResponse(list, "OK")
         testObserver.assertHasValue().assertHistorySize(1)
-        for(i in 0 until 4)
-        {
+        for (i in 0 until 4) {
             liveData.value = PopularResponse(TestUtility.getTestingPopularListOfSize(30), "OK")
         }
         testObserver.assertHasValue().assertHistorySize(5)
@@ -129,7 +128,8 @@ class NewsViewModelTest {
         testObserver.assertNoValue()
         testLifecycle.resume()
         for (i in 0 until 4) {
-            viewModel!!.testPopular!!.value = PopularResponse(TestUtility.getTestingPopularListOfSize(4), "OK")
+            viewModel!!.testPopular!!.value =
+                PopularResponse(TestUtility.getTestingPopularListOfSize(4), "OK")
         }
         val list = TestUtility.getTestingPopularListOfSize(10)
         viewModel!!.testPopular!!.value = PopularResponse(list, "OK")
@@ -156,9 +156,9 @@ class NewsViewModelTest {
         val list = TestUtility.getTestingSearchListOfSize(5)
         liveData!!.value = SearchResponseFull(SearchResponse(list), "OK")
         testObserver.assertHasValue().assertHistorySize(1)
-        for(i in 0 until 4)
-        {
-            liveData.value = SearchResponseFull(SearchResponse(TestUtility.getTestingSearchListOfSize(30)), "OK")
+        for (i in 0 until 4) {
+            liveData.value =
+                SearchResponseFull(SearchResponse(TestUtility.getTestingSearchListOfSize(30)), "OK")
         }
         testObserver.assertHasValue().assertHistorySize(5)
     }
@@ -171,11 +171,13 @@ class NewsViewModelTest {
         testObserver.assertNoValue()
         testLifecycle.resume()
         for (i in 0 until 4) {
-            viewModel!!.testSearch!!.value = SearchResponseFull(SearchResponse(TestUtility.getTestingSearchListOfSize(4)), "OK")
+            viewModel!!.testSearch!!.value =
+                SearchResponseFull(SearchResponse(TestUtility.getTestingSearchListOfSize(4)), "OK")
         }
         val list = TestUtility.getTestingSearchListOfSize(10)
         viewModel!!.testSearch!!.value = SearchResponseFull(SearchResponse(list), "OK")
-        testObserver.assertHasValue().assertValue(SearchResponseFull(SearchResponse(list), "OK")).assertHistorySize(5)
+        testObserver.assertHasValue().assertValue(SearchResponseFull(SearchResponse(list), "OK"))
+            .assertHistorySize(5)
         viewModel!!.testSearch!!.removeObserver(testObserver)
     }
 }

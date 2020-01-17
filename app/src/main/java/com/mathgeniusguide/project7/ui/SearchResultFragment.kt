@@ -20,7 +20,9 @@ import java.util.*
 class SearchResultFragment : BaseFragment() {
 
     // initialzie viewModel
-    private val viewModel by lazy { ViewModelProviders.of(activity!!).get(NewsViewModel::class.java) }
+    private val viewModel by lazy {
+        ViewModelProviders.of(activity!!).get(NewsViewModel::class.java)
+    }
     // initialize news list
     private val searchNewsList = ArrayList<SearchResult>()
     // initialize date, search term, and categories variables, which will later be gotten from bundle
@@ -73,18 +75,18 @@ class SearchResultFragment : BaseFragment() {
                 searchNewsList.sortByDescending { it.pub_date }
                 searchRV.layoutManager = LinearLayoutManager(context)
                 searchRV.adapter =
-                        SearchAdapter(searchNewsList, context!!, findNavController())
+                    SearchAdapter(searchNewsList, context!!, findNavController())
             }
         })
 
         // show progress bar if data is currrently being loaded
         viewModel.dataLoading.observe(viewLifecycleOwner, Observer {
-            progressBar.visibility = if(it) View.VISIBLE else View.GONE
+            progressBar.visibility = if (it) View.VISIBLE else View.GONE
         })
 
         // show error screen if error loading data
-        viewModel.isDataLoadingError.observe(viewLifecycleOwner, Observer {error ->
-            if(!error) {
+        viewModel.isDataLoadingError.observe(viewLifecycleOwner, Observer { error ->
+            if (!error) {
                 noNewsLayout.visibility = View.GONE
                 searchRV.visibility = View.VISIBLE
             } else {

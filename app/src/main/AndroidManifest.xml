@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.mathgeniusguide.project7">
+        package="com.mathgeniusguide.project7">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
             android:name=".base.App"
@@ -15,23 +15,28 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity android:name=".MainActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".notifications.NotificationJobService"
-                 android:permission="android.permission.BIND_JOB_SERVICE"
-                 android:exported="false"/>
+        <service
+                android:name=".notifications.NotificationJobService"
+                android:exported="false"
+                android:permission="android.permission.BIND_JOB_SERVICE" />
         <meta-data
                 android:name="preloaded_fonts"
                 android:resource="@array/preloaded_fonts" />
-        <uses-library android:name="android.test.runner"
+
+        <uses-library
+                android:name="android.test.runner"
                 android:required="false" />
 
-        <uses-library android:name="android.test.base"
+        <uses-library
+                android:name="android.test.base"
                 android:required="false" />
-        <uses-library android:name="android.test.mock"
+        <uses-library
+                android:name="android.test.mock"
                 android:required="false" />
     </application>
 </manifest>

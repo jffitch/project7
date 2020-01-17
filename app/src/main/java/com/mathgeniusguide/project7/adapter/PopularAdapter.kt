@@ -15,7 +15,11 @@ import com.mathgeniusguide.project7.util.Constants
 import kotlinx.android.synthetic.main.news_item.view.*
 import java.util.*
 
-class PopularAdapter (private val items: ArrayList<PopularResult>, val context: Context, private val navController: NavController) : RecyclerView.Adapter<PopularAdapter.ViewHolder> () {
+class PopularAdapter(
+    private val items: ArrayList<PopularResult>,
+    val context: Context,
+    private val navController: NavController
+) : RecyclerView.Adapter<PopularAdapter.ViewHolder>() {
     override fun getItemCount(): Int {
         return items.size
     }
@@ -48,7 +52,7 @@ class PopularAdapter (private val items: ArrayList<PopularResult>, val context: 
         }
     }
 
-    class ViewHolder (view : View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         // variables here are used in onBindViewHolder
         val displayDate = view.displayDate
         val displayTitle = view.displayTitle

@@ -102,7 +102,12 @@ class NotificationJobService : JobService() {
         intent.putExtra("dateEnd", dateEnd)
         val pendingIntent = PendingIntent.getActivity(applicationContext, 0, intent, 0)
         val title = resources.getString(R.string.notification_title)
-        val message = String.format(resources.getString(R.string.notification_message), newsCount, categories, searchTerm)
+        val message = String.format(
+            resources.getString(R.string.notification_message),
+            newsCount,
+            categories,
+            searchTerm
+        )
 
         // create and send notification
         val notification = NotificationCompat.Builder(applicationContext, "notificationChannel")

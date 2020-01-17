@@ -5,8 +5,9 @@ import android.net.ConnectivityManager
 import java.text.SimpleDateFormat
 import java.util.*
 
-fun Context.isOnline() : Boolean {
-    val connectivityManager = applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+fun Context.isOnline(): Boolean {
+    val connectivityManager =
+        applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     val info = connectivityManager.activeNetworkInfo
     return info != null && info.isConnected
 }

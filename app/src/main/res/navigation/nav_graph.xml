@@ -6,7 +6,7 @@
         app:startDestination="@id/splash">
     <action
             android:id="@+id/action_to_webpage"
-            app:destination="@id/webpage"/>
+            app:destination="@id/webpage" />
     <fragment
             android:id="@+id/topNews"
             android:name="com.mathgeniusguide.project7.ui.NewsFragment"
@@ -74,10 +74,10 @@
             tools:layout="@layout/splash_fragment">
         <action
                 android:id="@+id/load_notification"
-                app:destination="@id/searchResult"/>
+                app:destination="@id/searchResult" />
         <action
                 android:id="@+id/load_normal"
-                app:destination="@id/topNews"/>
+                app:destination="@id/topNews" />
     </fragment>
     <fragment
             android:id="@+id/searchResult"

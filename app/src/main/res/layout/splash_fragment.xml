@@ -18,11 +18,11 @@
             app:layout_constraintVertical_bias="0.45" />
 
     <TextView
+            style="@style/SplashText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/splash_text"
-            style="@style/SplashText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/splashTitle" />

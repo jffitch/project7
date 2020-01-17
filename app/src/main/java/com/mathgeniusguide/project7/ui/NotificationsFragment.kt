@@ -74,7 +74,9 @@ class NotificationsFragment : BaseFragment() {
         pref = context?.getSharedPreferences("com.mathgeniusguide.project7.pref", 0)
         // load checkbox states
         for (i in viewList) {
-            i.isChecked = pref?.getBoolean(resources.getResourceEntryName(i.id) + "_notification", false) ?: false
+            i.isChecked =
+                pref?.getBoolean(resources.getResourceEntryName(i.id) + "_notification", false)
+                    ?: false
         }
         // load switch state
         notificationSwitch.isChecked = pref?.getBoolean("switch", false) ?: false
@@ -87,7 +89,10 @@ class NotificationsFragment : BaseFragment() {
             // save query, checkboxes, and switch in SharedPreferences
             val editor = pref?.edit()
             for (i in viewList) {
-                editor?.putBoolean(resources.getResourceEntryName(i.id) + "_notification", i.isChecked)
+                editor?.putBoolean(
+                    resources.getResourceEntryName(i.id) + "_notification",
+                    i.isChecked
+                )
             }
             editor?.putBoolean("switch", notificationSwitch.isChecked)
             editor?.putString("notificationQuery", notificationQuery.text.toString())
@@ -111,8 +116,10 @@ class NotificationsFragment : BaseFragment() {
 
     // set up notification_fragment Job Service
     private fun notificationSetup() {
-        val scheduler = context!!.applicationContext.getSystemService(JOB_SCHEDULER_SERVICE) as JobScheduler
-        val componentName = ComponentName(context!!.applicationContext, NotificationJobService::class.java)
+        val scheduler =
+            context!!.applicationContext.getSystemService(JOB_SCHEDULER_SERVICE) as JobScheduler
+        val componentName =
+            ComponentName(context!!.applicationContext, NotificationJobService::class.java)
 
         // activate Job Service if Notification Switch is checked, cancel if not checked
         if (notificationSwitch.isChecked) {
@@ -123,7 +130,9 @@ class NotificationsFragment : BaseFragment() {
             bundle.putString("searchTerm", searchTerm)
             bundle.putString("categories", categories)
 
-            val jobInfo = JobInfo.Builder(0, componentName).setPeriodic(86400 * 1000).setExtras(bundle).build()
+            val jobInfo =
+                JobInfo.Builder(0, componentName).setPeriodic(86400 * 1000).setExtras(bundle)
+                    .build()
             scheduler.schedule(jobInfo)
         } else {
             scheduler.cancelAll()

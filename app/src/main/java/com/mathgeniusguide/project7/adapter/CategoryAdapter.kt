@@ -15,7 +15,12 @@ import kotlinx.android.synthetic.main.news_item.view.*
 import java.util.*
 
 // include views as arguments so their visibility can be changed in the onClick functions
-class CategoryAdapter (private val items: ArrayList<CategoryResult>, val context: Context, private val navController: NavController, private val tabPosition: Int) : RecyclerView.Adapter<CategoryAdapter.ViewHolder> () {
+class CategoryAdapter(
+    private val items: ArrayList<CategoryResult>,
+    val context: Context,
+    private val navController: NavController,
+    private val tabPosition: Int
+) : RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
     override fun getItemCount(): Int {
         return items.size
     }
@@ -33,8 +38,10 @@ class CategoryAdapter (private val items: ArrayList<CategoryResult>, val context
         // set date to fetched date, converted to "MMMM d, yyyy" format
         holder.displayDate.text = pos.created_date.convertDate()
         // set category to fetched section and subsection
-        val stringResource = if (pos.subsection != null && pos.subsection.isNotBlank()) R.string.section_and_subsection else R.string.section_only
-        holder.displayCategory.text = String.format(context.resources.getString(stringResource), pos.section, pos.subsection)
+        val stringResource =
+            if (pos.subsection != null && pos.subsection.isNotBlank()) R.string.section_and_subsection else R.string.section_only
+        holder.displayCategory.text =
+            String.format(context.resources.getString(stringResource), pos.section, pos.subsection)
         // load fetched image into ImageView using Glide
         if (pos.multimedia != null && pos.multimedia.isNotEmpty()) {
             Glide.with(context).load(pos.multimedia[0].url).into(holder.displayImage)
@@ -49,7 +56,7 @@ class CategoryAdapter (private val items: ArrayList<CategoryResult>, val context
         }
     }
 
-    class ViewHolder (view : View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         // variables here are used in onBindViewHolder
         val displayDate = view.displayDate
         val displayTitle = view.displayTitle

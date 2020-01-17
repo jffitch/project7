@@ -105,7 +105,8 @@ class SearchFragment : BaseFragment() {
         pref = context?.getSharedPreferences("com.mathgeniusguide.project7.pref", 0)
         // load checkbox states
         for (i in viewList) {
-            i.isChecked = pref?.getBoolean(resources.getResourceEntryName(i.id) + "_search", false) ?: false
+            i.isChecked =
+                pref?.getBoolean(resources.getResourceEntryName(i.id) + "_search", false) ?: false
         }
         // load query text
         searchQuery.setText(pref?.getString("searchQuery", "") ?: "")
@@ -140,7 +141,14 @@ class SearchFragment : BaseFragment() {
         // swap them if dateBegin is after dateEnd
         dateBegin = sdf.format(Date(today.time - max(timeBegin, timeEnd).toLong() * 86400000)) +
                 "T00:00:00Z"
-        dateEnd = sdf.format(Date(today.time - min(timeBegin, timeEnd).toLong() * 86400000)) + "T23:59:59Z"
+        dateEnd = sdf.format(
+            Date(
+                today.time - min(
+                    timeBegin,
+                    timeEnd
+                ).toLong() * 86400000
+            )
+        ) + "T23:59:59Z"
     }
 
     private fun getCategories(): String {

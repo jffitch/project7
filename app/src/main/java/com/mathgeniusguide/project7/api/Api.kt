@@ -31,7 +31,8 @@ interface Api {
         @Query("q") query: String,
         @Query("fq") categories: String,
         @Query("begin_date") beginDate: String,
-        @Query("end_date") endDate: String) : Response<SearchResponseFull>
+        @Query("end_date") endDate: String
+    ): Response<SearchResponseFull>
 
     // for use in JobService
     @GET("search/v2/articlesearch.json")
@@ -39,7 +40,8 @@ interface Api {
         @Query("q") query: String,
         @Query("fq") categories: String,
         @Query("begin_date") beginDate: String,
-        @Query("end_date") endDate: String) : Call<SearchResponseFull>
+        @Query("end_date") endDate: String
+    ): Call<SearchResponseFull>
 
 
     companion object {

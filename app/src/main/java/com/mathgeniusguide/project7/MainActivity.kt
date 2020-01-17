@@ -22,7 +22,8 @@ class MainActivity : AppCompatActivity() {
 
         navController = Navigation.findNavController(this, R.id.nav_host_fragment)
         // hide back arrow for these tabs
-        appBarConfiguration = AppBarConfiguration(setOf(R.id.topNews, R.id.mostPopular, R.id.politicsNews))
+        appBarConfiguration =
+            AppBarConfiguration(setOf(R.id.topNews, R.id.mostPopular, R.id.politicsNews))
 
         // set up tabs with Nav Controller
         tabs.setupWithNavController(navController)

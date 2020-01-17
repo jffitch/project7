@@ -16,7 +16,11 @@ import com.mathgeniusguide.project7.util.Constants
 import kotlinx.android.synthetic.main.news_item.view.*
 import java.util.*
 
-class SearchAdapter (private val items: ArrayList<SearchResult>, val context: Context, val navController: NavController) : RecyclerView.Adapter<SearchAdapter.ViewHolder> () {
+class SearchAdapter(
+    private val items: ArrayList<SearchResult>,
+    val context: Context,
+    val navController: NavController
+) : RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
     override fun getItemCount(): Int {
         return items.size
     }
@@ -35,11 +39,17 @@ class SearchAdapter (private val items: ArrayList<SearchResult>, val context: Co
         // set date to fetched date, converted to "MMMM d, yyyy" format
         holder.displayDate.text = pos.pub_date.convertDate()
         // set category to fetched section and subsection
-        val stringResource = if (pos.subsection_name != null && pos.subsection_name.isNotBlank()) R.string.section_and_subsection else R.string.section_only
-        holder.displayCategory.text = String.format(context.resources.getString(stringResource), pos.section_name, pos.subsection_name)
+        val stringResource =
+            if (pos.subsection_name != null && pos.subsection_name.isNotBlank()) R.string.section_and_subsection else R.string.section_only
+        holder.displayCategory.text = String.format(
+            context.resources.getString(stringResource),
+            pos.section_name,
+            pos.subsection_name
+        )
         // load fetched image into ImageView using Glide
         if (pos.multimedia != null && pos.multimedia.isNotEmpty()) {
-            Glide.with(context).load("https://nytimes.com/${pos.multimedia[0].url}").into(holder.displayImage)
+            Glide.with(context).load("https://nytimes.com/${pos.multimedia[0].url}")
+                .into(holder.displayImage)
         }
         // open webpage on click
         holder.parent.setOnClickListener {
@@ -51,7 +61,7 @@ class SearchAdapter (private val items: ArrayList<SearchResult>, val context: Co
         }
     }
 
-    class ViewHolder (view : View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         // variables here are used in onBindViewHolder
         val displayDate = view.displayDate
         val displayTitle = view.displayTitle

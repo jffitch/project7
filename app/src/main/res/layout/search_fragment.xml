@@ -1,43 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                   android:layout_width="match_parent"
-                                                   android:layout_height="match_parent">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <EditText android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:hint="@string/search"
-              android:id="@+id/searchQuery"
-              app:layout_constraintBottom_toTopOf="@id/beginDate"
-              app:layout_constraintTop_toTopOf="parent"/>
-
-    <EditText android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:hint="@string/begin_date"
-              android:id="@+id/beginDate"
-              app:layout_constraintTop_toBottomOf="@id/searchQuery"
-              app:layout_constraintBottom_toTopOf="@id/endDate"/>
-
-    <EditText android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:hint="@string/end_date"
-              android:id="@+id/endDate"
-              app:layout_constraintTop_toBottomOf="@id/beginDate"
-              app:layout_constraintBottom_toTopOf="@id/checklist"/>
-
-    <include layout="@layout/checklist_include"
-             android:layout_height="wrap_content"
-             android:layout_width="wrap_content"
-             android:id="@+id/checklist"
-             app:layout_constraintTop_toBottomOf="@id/endDate"
-             app:layout_constraintBottom_toTopOf="@id/searchButton"/>
-
-    <Button android:layout_width="match_parent"
+    <EditText
+            android:id="@+id/searchQuery"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:hint="@string/search"
+            app:layout_constraintBottom_toTopOf="@id/beginDate"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+            android:id="@+id/beginDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/begin_date"
+            app:layout_constraintBottom_toTopOf="@id/endDate"
+            app:layout_constraintTop_toBottomOf="@id/searchQuery" />
+
+    <EditText
+            android:id="@+id/endDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/end_date"
+            app:layout_constraintBottom_toTopOf="@id/checklist"
+            app:layout_constraintTop_toBottomOf="@id/beginDate" />
+
+    <include
+            android:id="@+id/checklist"
+            layout="@layout/checklist_include"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/searchButton"
+            app:layout_constraintTop_toBottomOf="@id/endDate" />
+
+    <Button
             android:id="@+id/searchButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="@string/search"
-            app:layout_constraintTop_toBottomOf="@id/checklist"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/checklist" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -47,11 +47,13 @@ class WebFragment : BaseFragment() {
 
     override fun handleBack() {
         // go back to previous fragment, using "previous" variable
-        findNavController().navigate(when (previous) {
-            Constants.POPULAR_NEWS -> R.id.action_web_to_mostPopular
-            Constants.POLITICS_NEWS -> R.id.action_web_to_politicsNews
-            Constants.SEARCH_NEWS -> R.id.action_web_to_searchResult
-            else -> R.id.action_web_to_topNews
-        })
+        findNavController().navigate(
+            when (previous) {
+                Constants.POPULAR_NEWS -> R.id.action_web_to_mostPopular
+                Constants.POLITICS_NEWS -> R.id.action_web_to_politicsNews
+                Constants.SEARCH_NEWS -> R.id.action_web_to_searchResult
+                else -> R.id.action_web_to_topNews
+            }
+        )
     }
 }

@@ -19,9 +19,11 @@ import com.mathgeniusguide.project7.util.Constants
 import com.mathgeniusguide.project7.viewmodel.NewsViewModel
 import kotlinx.android.synthetic.main.news_fragment.*
 
-class NewsFragment: BaseFragment() {
+class NewsFragment : BaseFragment() {
     // initialize viewModel
-    private val viewModel by lazy { ViewModelProviders.of(activity!!).get(NewsViewModel::class.java)}
+    private val viewModel by lazy {
+        ViewModelProviders.of(activity!!).get(NewsViewModel::class.java)
+    }
     // initialize news lists
     private val categoryNewsList = ArrayList<CategoryResult>()
     private val popularNewsList = ArrayList<PopularResult>()
@@ -55,12 +57,12 @@ class NewsFragment: BaseFragment() {
 
         // show progress bar if data is currrently being loaded
         viewModel.dataLoading.observe(viewLifecycleOwner, Observer {
-            progressBar.visibility = if(it) View.VISIBLE else View.GONE
+            progressBar.visibility = if (it) View.VISIBLE else View.GONE
         })
 
         // show error screen if error loading data
-        viewModel.isDataLoadingError.observe(viewLifecycleOwner, Observer {error ->
-            if(!error) {
+        viewModel.isDataLoadingError.observe(viewLifecycleOwner, Observer { error ->
+            if (!error) {
                 noNewsLayout.visibility = View.GONE
             } else {
                 noNewsLayout.visibility = View.VISIBLE
@@ -82,14 +84,19 @@ class NewsFragment: BaseFragment() {
                 // fetch relevant news_fragment and observe
                 viewModel.fetchTopNews()
                 viewModel.topNews?.observe(viewLifecycleOwner, Observer {
-                    if(it != null) {
+                    if (it != null) {
                         // Recycler View
                         // add each result to array list, then set up layout manager and adapter
                         categoryNewsList.clear()
                         categoryNewsList.addAll(it.results)
                         categoryNewsList.sortByDescending { v -> v.created_date }
                         newsRV.layoutManager = LinearLayoutManager(context)
-                        newsRV.adapter = CategoryAdapter(categoryNewsList, context!!, findNavController(), position)
+                        newsRV.adapter = CategoryAdapter(
+                            categoryNewsList,
+                            context!!,
+                            findNavController(),
+                            position
+                        )
                     }
                 })
             }
@@ -97,14 +104,15 @@ class NewsFragment: BaseFragment() {
                 // fetch relevant news_fragment and observe
                 viewModel.fetchPopularNews()
                 viewModel.popularNews?.observe(viewLifecycleOwner, Observer {
-                    if(it != null) {
+                    if (it != null) {
                         // Recycler View
                         // add each result to array list, then set up layout manager and adapter
                         popularNewsList.clear()
                         popularNewsList.addAll(it.results)
                         popularNewsList.sortByDescending { v -> v.published_date }
                         newsRV.layoutManager = LinearLayoutManager(context)
-                        newsRV.adapter = PopularAdapter(popularNewsList, context!!, findNavController())
+                        newsRV.adapter =
+                            PopularAdapter(popularNewsList, context!!, findNavController())
                     }
                 })
             }
@@ -112,14 +120,19 @@ class NewsFragment: BaseFragment() {
                 // fetch relevant news_fragment and observe
                 viewModel.fetchPoliticsNews()
                 viewModel.politicsNews?.observe(viewLifecycleOwner, Observer {
-                    if(it != null) {
+                    if (it != null) {
                         // Recycler View
                         // add each result to array list, then set up layout manager and adapter
                         politicsNewsList.clear()
                         politicsNewsList.addAll(it.results)
                         politicsNewsList.sortByDescending { v -> v.created_date }
                         newsRV.layoutManager = LinearLayoutManager(context)
-                        newsRV.adapter = CategoryAdapter(politicsNewsList, context!!, findNavController(), position)
+                        newsRV.adapter = CategoryAdapter(
+                            politicsNewsList,
+                            context!!,
+                            findNavController(),
+                            position
+                        )
                     }
                 })
             }
@@ -127,7 +140,7 @@ class NewsFragment: BaseFragment() {
     }
 
     override fun handleBack() {
-        if(newsBackArrowPressed) {
+        if (newsBackArrowPressed) {
             newsBackArrowPressed = false
         } else {
             activity?.finish()
